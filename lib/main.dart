@@ -1,5 +1,5 @@
 import 'package:cemindmap_ui/main.data.dart';
-// import 'package:cemindmap_ui/models/project.dart';
+import 'package:cemindmap_ui/project_node.dart';
 import 'package:cemindmap_ui/providers/graph_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:graphview/GraphView.dart';
@@ -66,11 +66,8 @@ class MindMap extends HookConsumerWidget {
               ..style = PaintingStyle.fill,
             builder: (Node node) {
               // I can decide what widget should be shown here based on the id
-              var a = node.key!.value as int?;
-              if (a == 2) {
-                return rectangWidget(node.key);
-              }
-              return rectangWidget(a);
+              var n = node.key!.value as ProjectNodeData;
+              return rectangWidget(n.project.projectName);
             }));
   }
 
