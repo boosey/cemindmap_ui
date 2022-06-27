@@ -48,28 +48,53 @@ class MindMap extends HookConsumerWidget {
       return const CircularProgressIndicator();
     }
 
-    return RefreshIndicator(
-      onRefresh: () => ref.read(provider.notifier).reload(),
-      child: ListView(
-        children: (projects.model ?? [])
-            .map(
-              (project) => ListTile(
-                title: Text('${project.projectName}'),
-              ),
-            )
-            .toList(),
-      ),
-    );
+    return InteractiveViewer(
+        constrained: false,
+        boundaryMargin: const EdgeInsets.all(8),
+        minScale: 0.0001,
+        maxScale: 0.5,
+        scaleFactor: 50.0,
+        child: GraphView(
+            graph: buildGraph(projects.model ?? []),
+            // algorithm: BuchheimWalkerAlgorithm(
+            //     BuchheimWalkerConfiguration(), ArrowEdgeRenderer()),
+            algorithm: SugiyamaAlgorithm(SugiyamaConfiguration()),
+            paint: Paint()
+              ..color = Colors.green
+              ..strokeWidth = 1
+              ..style = PaintingStyle.fill,
+            builder: (Node node) {
+              // I can decide what widget should be shown here based on the id
+              var a = node.key!.value as int?;
+              if (a == 2) {
+                return rectangWidget(node.key);
+              }
+              return rectangWidget(a);
+            }));
   }
 
   Graph buildGraph(List<Project> projects) {
     var graph = Graph();
 
-    Node root = Node.Id('Projects');
+    Node root = Node.Id(-1);
+    var i = 0;
+    // ignore: unused_local_variable
     for (var p in projects) {
-      graph.addEdge(root, Node.Id(p.projectName));
+      graph.addEdge(root, Node.Id(i++));
     }
 
     return graph;
+  }
+
+  Widget rectangWidget(dynamic id) {
+    return Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(4),
+          boxShadow: const [
+            BoxShadow(color: Colors.blue, spreadRadius: 1),
+          ],
+        ),
+        child: Text(id.toString()));
   }
 }
