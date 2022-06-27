@@ -1,5 +1,6 @@
 import 'package:cemindmap_ui/main.data.dart';
-import 'package:cemindmap_ui/models/project.dart';
+// import 'package:cemindmap_ui/models/project.dart';
+import 'package:cemindmap_ui/providers/graph_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:graphview/GraphView.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -38,13 +39,13 @@ class MindMap extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // NOTE: here we could use `ref.tasks.watchAll()` but we
-    // break it down in provider + watch in order to access the
-    // notifier below (onRefresh)
-    final provider = ref.projects.watchAllProvider(syncLocal: true);
-    final projects = ref.watch(provider);
+    final graphProvider = StateNotifierProvider<GraphState, Graph>((localref) {
+      return GraphState(ref);
+    });
 
-    if (projects.isLoading) {
+    final graph = ref.watch(graphProvider);
+
+    if (graph.nodeCount() < 1) {
       return const CircularProgressIndicator();
     }
 
@@ -55,7 +56,7 @@ class MindMap extends HookConsumerWidget {
         maxScale: 0.5,
         scaleFactor: 50.0,
         child: GraphView(
-            graph: buildGraph(projects.model ?? []),
+            graph: graph,
             // algorithm: BuchheimWalkerAlgorithm(
             //     BuchheimWalkerConfiguration(), ArrowEdgeRenderer()),
             algorithm: SugiyamaAlgorithm(SugiyamaConfiguration()),
@@ -71,19 +72,6 @@ class MindMap extends HookConsumerWidget {
               }
               return rectangWidget(a);
             }));
-  }
-
-  Graph buildGraph(List<Project> projects) {
-    var graph = Graph();
-
-    Node root = Node.Id(-1);
-    var i = 0;
-    // ignore: unused_local_variable
-    for (var p in projects) {
-      graph.addEdge(root, Node.Id(i++));
-    }
-
-    return graph;
   }
 
   Widget rectangWidget(dynamic id) {
