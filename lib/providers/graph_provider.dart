@@ -23,6 +23,7 @@ class GraphState extends StateNotifier<Graph> {
 
   Graph createGraph() {
     var graph = Graph();
+    graph.isTree = true;
 
     Node root =
         Node.Id(NodeData(key: "root", isRoot: true, project: Project()));

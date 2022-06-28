@@ -1,8 +1,10 @@
 import 'package:cemindmap_ui/main.data.dart';
 import 'package:cemindmap_ui/node_data.dart';
 import 'package:cemindmap_ui/providers/graph_provider.dart';
-import 'package:cemindmap_ui/providers/view_by_selection.dart';
+import 'package:cemindmap_ui/widgets/account_filter_widget.dart';
+import 'package:cemindmap_ui/widgets/geo_filiter_widget.dart';
 import 'package:cemindmap_ui/widgets/node_widget.dart';
+import 'package:cemindmap_ui/widgets/view_by_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:graphview/GraphView.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -41,25 +43,16 @@ class MindMap extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final graphProvider = StateNotifierProvider<GraphState, Graph>((localref) {
-      return GraphState(ref);
-    });
+    final graphProvider =
+        StateNotifierProvider<GraphState, Graph>((_) => GraphState(ref));
 
     final graph = ref.watch(graphProvider);
+
+    var builder = BuchheimWalkerConfiguration();
 
     if (graph.nodeCount() < 1) {
       return const CircularProgressIndicator();
     }
-
-    var items = ViewBySelection.choices()
-        .map<ViewByChoice, DropdownMenuItem<ViewByChoice>>(
-            (choice, label) => MapEntry(
-                  choice,
-                  DropdownMenuItem(
-                    value: choice,
-                    child: Text(label),
-                  ),
-                ));
 
     return Padding(
       padding: const EdgeInsets.all(20.0),
@@ -67,24 +60,9 @@ class MindMap extends HookConsumerWidget {
         children: [
           Row(
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "View By",
-                    textAlign: TextAlign.left,
-                  ),
-                  DropdownButton<ViewByChoice>(
-                    items: items.values.toList(),
-
-                    value: ref.watch(viewBySelectionProvider),
-                    // When the user interacts with the dropdown, we update the provider state.
-                    onChanged: (value) => ref
-                        .read(viewBySelectionProvider.notifier)
-                        .selectView(value!),
-                  ),
-                ],
-              ),
+              ViewByWidget(),
+              const GeoFilterWidget(),
+              const AccountFilterWidget(),
             ],
           ),
           Expanded(
@@ -98,7 +76,9 @@ class MindMap extends HookConsumerWidget {
                     graph: graph,
                     // algorithm: BuchheimWalkerAlgorithm(
                     //     BuchheimWalkerConfiguration(), ArrowEdgeRenderer()),
-                    algorithm: SugiyamaAlgorithm(SugiyamaConfiguration()),
+                    // algorithm: SugiyamaAlgorithm(SugiyamaConfiguration()),
+                    algorithm: BuchheimWalkerAlgorithm(
+                        builder, TreeEdgeRenderer(builder)),
                     paint: Paint()
                       ..color = Colors.green
                       ..strokeWidth = 1
