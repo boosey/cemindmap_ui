@@ -15,8 +15,8 @@ class ViewBySelection extends StateNotifier<ViewByChoice> {
 
   static Map<ViewByChoice, String> choices() => {
         ViewByChoice.organization: "Organization",
-        ViewByChoice.projectLeader: "Project Leader",
         ViewByChoice.account: "Account",
+        ViewByChoice.projectLeader: "Project Leader",
       };
 }
 

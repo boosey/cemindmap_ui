@@ -30,7 +30,7 @@ class GraphState extends StateNotifier<Graph> {
     if (projects.hasModel) {
       switch (viewBySelection) {
         case ViewByChoice.organization:
-          return geoGraph(graph, root);
+          return graphByOrganization(graph, root);
 
         case ViewByChoice.projectLeader:
           // TODO: Handle this case.
@@ -43,46 +43,61 @@ class GraphState extends StateNotifier<Graph> {
     return graph;
   }
 
-  Graph geoGraph(Graph graph, Node root) {
-    var geoNodeDataSet = <NodeData>{};
-    var marketNodeDataSet = <NodeData>{};
-    var squadNodeDataSet = <NodeData>{};
+  Set<NodeData> buildGraphLayer(Graph graph, Set<NodeData> parentLayerSet,
+      String Function(Project) parentKey, String Function(Project) childKey) {
+    var currentLayerSet = <NodeData>{};
 
     for (var p in projects.model!) {
-      var geoNodeData = NodeData(key: p.geo!);
-      if (geoNodeDataSet.add(geoNodeData)) {
+      var nodeData = NodeData(key: childKey(p));
+      if (currentLayerSet.add(nodeData)) {
         graph.addEdge(
-          root,
-          Node.Id(geoNodeData),
+          Node.Id(parentLayerSet.firstWhere((d) => d.key == parentKey(p))),
+          Node.Id(nodeData),
         );
       }
     }
+    return currentLayerSet;
+  }
 
-    for (var p in projects.model!) {
-      var marketNodeData = NodeData(key: p.market!);
-      if (marketNodeDataSet.add(marketNodeData)) {
-        graph.addEdge(
-          Node.Id(geoNodeDataSet.firstWhere((g) => g.key == p.geo)),
-          Node.Id(marketNodeData),
-        );
-      }
-    }
+  Set<NodeData> geoLayer(Graph graph, Set<NodeData> parentLayerSet) {
+    return buildGraphLayer(
+        graph, parentLayerSet, (parent) => "root", (child) => child.geo!);
+  }
 
-    for (var p in projects.model!) {
-      var squadNodeData = NodeData(key: p.geoMarketSquad!);
-      if (squadNodeDataSet.add(squadNodeData)) {
-        graph.addEdge(
-          Node.Id(marketNodeDataSet.firstWhere((m) => m.key == p.market)),
-          Node.Id(squadNodeData),
-        );
-      }
-    }
+  Set<NodeData> marketLayer(Graph graph, Set<NodeData> parentLayerSet) {
+    return buildGraphLayer(graph, parentLayerSet, (parent) => parent.geo!,
+        (child) => child.market!);
+  }
+
+  Set<NodeData> squadLayer(Graph graph, Set<NodeData> parentLayerSet) {
+    return buildGraphLayer(graph, parentLayerSet, (parent) => parent.market!,
+        (child) => child.geoMarketSquad!);
+  }
+
+  Set<NodeData> accountLayer(Graph graph, Set<NodeData> parentLayerSet) {
+    return buildGraphLayer(graph, parentLayerSet,
+        (parent) => parent.geoMarketSquad!, (child) => child.accountName!);
+  }
+
+  Graph graphByOrganization(Graph graph, Node root) {
+    var accountNodeDataSet = accountLayer(
+      graph,
+      squadLayer(
+        graph,
+        marketLayer(
+          graph,
+          geoLayer(
+            graph,
+            <NodeData>{root.key!.value},
+          ),
+        ),
+      ),
+    );
 
     for (var p in projects.model!) {
       graph.addEdge(
-          Node.Id(
-              squadNodeDataSet.firstWhere((s) => s.key == p.geoMarketSquad)),
-          Node.Id(NodeData(key: p.projectId!, isProject: true, project: p)));
+          Node.Id(accountNodeDataSet.firstWhere((s) => s.key == p.accountName)),
+          Node.Id(NodeData(key: p.projectName!, isProject: true, project: p)));
     }
 
     return graph;
