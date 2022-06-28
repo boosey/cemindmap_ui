@@ -1,8 +1,8 @@
 import 'package:cemindmap_ui/main.data.dart';
 import 'package:cemindmap_ui/node_data.dart';
 import 'package:cemindmap_ui/providers/graph_provider.dart';
-import 'package:cemindmap_ui/widgets/account_filter_widget.dart';
-import 'package:cemindmap_ui/widgets/geo_filiter_widget.dart';
+import 'package:cemindmap_ui/providers/set_provider.dart';
+import 'package:cemindmap_ui/widgets/filter_widget.dart';
 import 'package:cemindmap_ui/widgets/node_widget.dart';
 import 'package:cemindmap_ui/widgets/view_by_widget.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +48,9 @@ class MindMap extends HookConsumerWidget {
 
     final graph = ref.watch(graphProvider);
 
-    var builder = BuchheimWalkerConfiguration();
+    var builder = BuchheimWalkerConfiguration()
+      ..levelSeparation = 30
+      ..siblingSeparation = 15;
 
     if (graph.nodeCount() < 1) {
       return const CircularProgressIndicator();
@@ -61,15 +63,29 @@ class MindMap extends HookConsumerWidget {
           Row(
             children: [
               ViewByWidget(),
-              const GeoFilterWidget(),
-              const AccountFilterWidget(),
+              FilterWidget(
+                label: "Geography",
+                itemSetProvider: geoSetProvider,
+              ),
+              FilterWidget(
+                label: "Market",
+                itemSetProvider: marketSetProvider,
+              ),
+              FilterWidget(
+                label: "Squad",
+                itemSetProvider: squadSetProvider,
+              ),
+              FilterWidget(
+                label: "Account",
+                itemSetProvider: accountSetProvider,
+              ),
             ],
           ),
           Expanded(
             child: InteractiveViewer(
                 constrained: false,
                 boundaryMargin: const EdgeInsets.all(8),
-                minScale: 0.0001,
+                minScale: 0.1,
                 maxScale: 0.5,
                 scaleFactor: 50.0,
                 child: GraphView(
@@ -81,12 +97,12 @@ class MindMap extends HookConsumerWidget {
                         builder, TreeEdgeRenderer(builder)),
                     paint: Paint()
                       ..color = Colors.green
-                      ..strokeWidth = 1
+                      ..strokeWidth = 3
                       ..style = PaintingStyle.fill,
                     builder: (Node node) {
                       var nd = node.key!.value as NodeData;
 
-                      return NodeWidget(nodeData: nd);
+                      return NodeWidget.from(nodeData: nd);
                     })),
           ),
         ],

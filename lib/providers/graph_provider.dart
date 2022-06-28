@@ -49,7 +49,7 @@ class GraphState extends StateNotifier<Graph> {
     var currentLayerSet = <NodeData>{};
 
     for (var p in projects.model!) {
-      var nodeData = NodeData(key: childKey(p));
+      var nodeData = NodeData(key: childKey(p), isProject: false);
       if (currentLayerSet.add(nodeData)) {
         graph.addEdge(
           Node.Id(parentLayerSet.firstWhere((d) => d.key == parentKey(p))),
