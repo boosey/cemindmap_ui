@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../providers/set_provider.dart';
+
 class FilterWidget extends ConsumerWidget {
   final String label;
   final Provider<Set<String>> itemSetProvider;
+  final StateNotifierProvider<FilterSelection, String> selectionProvider;
 
   const FilterWidget({
     Key? key,
     required this.itemSetProvider,
+    required this.selectionProvider,
     required this.label,
   }) : super(key: key);
 
@@ -24,9 +28,13 @@ class FilterWidget extends ConsumerWidget {
         ),
         DropdownButton<String>(
           items: createDropdownItems(items),
-          value: items.first,
+          value: ref.read(selectionProvider).isNotEmpty
+              ? ref.read(selectionProvider)
+              : items.first,
           // When the user interacts with the dropdown, we update the provider state.
-          onChanged: (value) {},
+          onChanged: (value) {
+            ref.read(selectionProvider.notifier).selection(value!);
+          },
         ),
       ],
     );
