@@ -1,4 +1,4 @@
-import 'package:cemindmap_ui/node_data.dart';
+import 'package:cemindmap_ui/models/projects_structure.dart';
 import 'package:cemindmap_ui/widgets/label_node_widget.dart';
 import 'package:cemindmap_ui/widgets/project_node_widget.dart';
 import 'package:flutter/material.dart';
@@ -9,9 +9,9 @@ class NodeWidget extends StatelessWidget {
     required this.nodeData,
   }) : super(key: key);
 
-  final NodeData nodeData;
+  final BasicNode nodeData;
 
-  factory NodeWidget.from({required NodeData nodeData}) {
+  factory NodeWidget.from({required BasicNode nodeData}) {
     if (!nodeData.isProject) {
       return LabelNodeWidget(nodeData: nodeData);
     }
@@ -25,8 +25,6 @@ class NodeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String title = nodeData.isRoot ? "Client Engineering" : nodeData.key;
-
     return Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
@@ -35,6 +33,6 @@ class NodeWidget extends StatelessWidget {
             BoxShadow(color: Colors.blue, spreadRadius: 1),
           ],
         ),
-        child: Text("Superclass: $title"));
+        child: const Text("Superclass"));
   }
 }
