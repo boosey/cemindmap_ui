@@ -1,15 +1,28 @@
-import 'package:cemindmap_ui/models/project.dart';
+import 'package:cemindmap_ui/models/raw_project.dart';
+import 'package:cemindmap_ui/nodes/account_node.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 import 'node_data.dart';
 
-class ProjectNode extends NodeData {
-  ProjectNode({
-    required super.key,
-    required this.project,
-    super.isProject = true,
-  });
+part 'project_node.g.dart';
 
-  final Project? project;
+@JsonSerializable(explicitToJson: true)
+class ProjectNode extends NodeData {
+  ProjectNode() : super(key: 'na');
+  ProjectNode.fromRawProject({
+    required this.rawProject,
+    required this.account,
+    super.isProject = true,
+  }) : super(key: rawProject.projectId!);
+
+  late RawProject rawProject;
+  late AccountNode account;
+
+  factory ProjectNode.fromJson(Map<String, dynamic> data) =>
+      _$ProjectNodeFromJson(data);
+
+  @override
+  Map<String, dynamic> toJson() => _$ProjectNodeToJson(this);
 
   @override
   // ignore: hash_and_equals

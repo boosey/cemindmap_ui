@@ -2,9 +2,9 @@ import 'package:flutter_data/flutter_data.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:copy_with_extension/copy_with_extension.dart';
 
-part 'project.g.dart';
+part 'raw_project.g.dart';
 
-mixin ProjectAdapter on RemoteAdapter<Project> {
+mixin ProjectAdapter on RemoteAdapter<RawProject> {
   @override
   String get baseUrl => 'http://localhost:8888/';
 }
@@ -12,7 +12,7 @@ mixin ProjectAdapter on RemoteAdapter<Project> {
 @JsonSerializable()
 @CopyWith()
 @DataRepository([ProjectAdapter])
-class Project extends DataModel<Project> {
+class RawProject extends DataModel<RawProject> {
   @override
   final int? id;
   final String? projectId;
@@ -45,7 +45,7 @@ class Project extends DataModel<Project> {
 
   final DateTime? createdAt;
 
-  Project({
+  RawProject({
     this.id,
     this.projectId,
     this.projectName,
@@ -76,4 +76,9 @@ class Project extends DataModel<Project> {
     this.opportunityFiscalYear,
     this.createdAt,
   });
+
+  static RawProject fromJson(Map<String, dynamic> json) =>
+      _$RawProjectFromJson(json);
+
+  Map<String, dynamic> toJson() => _$RawProjectToJson(this);
 }

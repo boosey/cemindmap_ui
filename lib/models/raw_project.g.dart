@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'project.dart';
+part of 'raw_project.dart';
 
 // **************************************************************************
 // RepositoryGenerator
@@ -8,52 +8,54 @@ part of 'project.dart';
 
 // ignore_for_file: non_constant_identifier_names, duplicate_ignore
 
-mixin $ProjectLocalAdapter on LocalAdapter<Project> {
-  static final Map<String, RelationshipMeta> _kProjectRelationshipMetas = {};
+mixin $RawProjectLocalAdapter on LocalAdapter<RawProject> {
+  static final Map<String, RelationshipMeta> _kRawProjectRelationshipMetas = {};
 
   @override
   Map<String, RelationshipMeta> get relationshipMetas =>
-      _kProjectRelationshipMetas;
+      _kRawProjectRelationshipMetas;
 
   @override
-  Project deserialize(map) {
+  RawProject deserialize(map) {
     map = transformDeserialize(map);
-    return _$ProjectFromJson(map);
+    return _$RawProjectFromJson(map);
   }
 
   @override
   Map<String, dynamic> serialize(model, {bool withRelationships = true}) {
-    final map = _$ProjectToJson(model);
+    final map = _$RawProjectToJson(model);
     return transformSerialize(map, withRelationships: withRelationships);
   }
 }
 
-final _projectsFinders = <String, dynamic>{};
+final _rawProjectsFinders = <String, dynamic>{};
 
 // ignore: must_be_immutable
-class $ProjectHiveLocalAdapter = HiveLocalAdapter<Project>
-    with $ProjectLocalAdapter;
+class $RawProjectHiveLocalAdapter = HiveLocalAdapter<RawProject>
+    with $RawProjectLocalAdapter;
 
-class $ProjectRemoteAdapter = RemoteAdapter<Project> with ProjectAdapter;
+class $RawProjectRemoteAdapter = RemoteAdapter<RawProject> with ProjectAdapter;
 
-final internalProjectsRemoteAdapterProvider = Provider<RemoteAdapter<Project>>(
-    (ref) => $ProjectRemoteAdapter(
-        $ProjectHiveLocalAdapter(ref.read), InternalHolder(_projectsFinders)));
+final internalRawProjectsRemoteAdapterProvider =
+    Provider<RemoteAdapter<RawProject>>((ref) => $RawProjectRemoteAdapter(
+        $RawProjectHiveLocalAdapter(ref.read),
+        InternalHolder(_rawProjectsFinders)));
 
-final projectsRepositoryProvider =
-    Provider<Repository<Project>>((ref) => Repository<Project>(ref.read));
+final rawProjectsRepositoryProvider =
+    Provider<Repository<RawProject>>((ref) => Repository<RawProject>(ref.read));
 
-extension ProjectDataRepositoryX on Repository<Project> {
+extension RawProjectDataRepositoryX on Repository<RawProject> {
   ProjectAdapter get projectAdapter => remoteAdapter as ProjectAdapter;
 }
 
-extension ProjectRelationshipGraphNodeX on RelationshipGraphNode<Project> {}
+extension RawProjectRelationshipGraphNodeX
+    on RelationshipGraphNode<RawProject> {}
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Project _$ProjectFromJson(Map<String, dynamic> json) => Project(
+RawProject _$RawProjectFromJson(Map<String, dynamic> json) => RawProject(
       id: json['id'] as int?,
       projectId: json['projectId'] as String?,
       projectName: json['projectName'] as String?,
@@ -93,7 +95,8 @@ Project _$ProjectFromJson(Map<String, dynamic> json) => Project(
           : DateTime.parse(json['createdAt'] as String),
     );
 
-Map<String, dynamic> _$ProjectToJson(Project instance) => <String, dynamic>{
+Map<String, dynamic> _$RawProjectToJson(RawProject instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'projectId': instance.projectId,
       'projectName': instance.projectName,

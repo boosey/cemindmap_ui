@@ -8,7 +8,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:cemindmap_ui/models/project.dart';
+import 'package:cemindmap_ui/models/raw_project.dart';
 
 // ignore: prefer_function_declarations_over_variables
 ConfigureRepositoryLocalStorage configureRepositoryLocalStorage = ({FutureFn<String>? baseDirFn, List<int>? encryptionKey, bool? clear}) {
@@ -28,13 +28,13 @@ ConfigureRepositoryLocalStorage configureRepositoryLocalStorage = ({FutureFn<Str
 };
 
 final repositoryProviders = <String, Provider<Repository<DataModel>>>{
-  'projects': projectsRepositoryProvider
+  'rawProjects': rawProjectsRepositoryProvider
 };
 
 final repositoryInitializerProvider =
   FutureProvider<RepositoryInitializer>((ref) async {
-    final adapters = <String, RemoteAdapter>{'projects': ref.watch(internalProjectsRemoteAdapterProvider)};
-    final remotes = <String, bool>{'projects': true};
+    final adapters = <String, RemoteAdapter>{'rawProjects': ref.watch(internalRawProjectsRemoteAdapterProvider)};
+    final remotes = <String, bool>{'rawProjects': true};
 
     await ref.watch(graphNotifierProvider).initialize();
 
@@ -52,10 +52,10 @@ final repositoryInitializerProvider =
     return RepositoryInitializer();
 });
 extension RepositoryWidgetRefX on WidgetRef {
-  Repository<Project> get projects => watch(projectsRepositoryProvider)..remoteAdapter.internalWatch = watch;
+  Repository<RawProject> get rawProjects => watch(rawProjectsRepositoryProvider)..remoteAdapter.internalWatch = watch;
 }
 
 extension RepositoryRefX on Ref {
 
-  Repository<Project> get projects => watch(projectsRepositoryProvider)..remoteAdapter.internalWatch = watch as Watcher;
+  Repository<RawProject> get rawProjects => watch(rawProjectsRepositoryProvider)..remoteAdapter.internalWatch = watch as Watcher;
 }

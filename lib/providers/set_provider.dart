@@ -1,16 +1,16 @@
 import 'package:cemindmap_ui/main.data.dart';
-import 'package:cemindmap_ui/models/project.dart';
+import 'package:cemindmap_ui/models/raw_project.dart';
 import 'package:flutter_data/flutter_data.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 Provider<Set<String>> setProvider({
-  required String Function(Project) keyFunction,
-  required bool Function(String, Project) selectionFunction,
+  required String Function(RawProject) keyFunction,
+  required bool Function(String, RawProject) selectionFunction,
   bool includeAllOption = false,
   StateNotifierProvider<FilterSelection, String>? parentSelectionProvider,
 }) {
   return Provider<Set<String>>((ref) {
-    var projects = ref.projects.watchAll();
+    var projects = ref.rawProjects.watchAll();
     String parentSelection;
     if (parentSelectionProvider != null) {
       parentSelection = ref.watch(parentSelectionProvider);

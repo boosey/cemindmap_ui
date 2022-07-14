@@ -1,16 +1,13 @@
-import 'dart:developer';
-
 import 'package:cemindmap_ui/main.data.dart';
-import 'package:cemindmap_ui/models/projects_structure.dart';
+import 'package:cemindmap_ui/providers/filtered_nodes_providers.dart';
+import 'package:cemindmap_ui/providers/all_nodes_providers.dart';
 import 'package:cemindmap_ui/providers/set_provider.dart';
 import 'package:cemindmap_ui/widgets/filter_widget.dart';
-import 'package:cemindmap_ui/widgets/label_node_widget.dart';
-import 'package:cemindmap_ui/widgets/project_node_widget.dart';
+import 'package:cemindmap_ui/widgets/tiles.dart';
 import 'package:cemindmap_ui/widgets/view_by_widget.dart';
-import 'package:cemindmap_ui/widgets/widget_size.dart';
+import 'package:cemindmap_ui/widgets/worldwide_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'providers/project_structure_state_notifier.dart';
 
 void main() {
   runApp(
@@ -46,159 +43,15 @@ class MindMap extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final projectStructureProvider =
-        StateNotifierProvider<ProjectStructureStateNotifier, ProjectStructure>(
-            (r) {
-      final projects = ref.projects.watchAll();
-      // final viewBySelection = ref.watch(viewBySelectionProvider);
-      // final geoSelection = ref.watch(geoSelectionProvider);
-      // final marketSelection = ref.watch(marketSelectionProvider);
-      // final squadSelection = ref.watch(squadSelectionProvider);
-      // final accountSelection = ref.watch(accountSelectionProvider);
-      return ProjectStructureStateNotifier(
-        projects: projects.hasModel ? projects.model! : [],
-        // geoSelection: geoSelection,
-        // marketSelection: marketSelection,
-        // squadSelection: squadSelection,
-        // accountSelection: accountSelection,
-        // viewBySelection: viewBySelection,
-      );
-    });
+    final wwNode = ref.watch(worldwideNodeProvider);
+    final filteredGeos = ref.watch(filteredGeosProvider);
+    final filteredMarkets = ref.watch(filteredMarketsProvider);
+    final filteredSquads = ref.watch(filteredSquadProvider);
+    final filteredAccounts = ref.watch(filteredAccountsProvider);
+    final filteredProjects = ref.watch(filteredProjectsProvider);
 
-    var projectStructure = ref.watch(projectStructureProvider);
-
-    Widget createLabelTile(LabelNode node) {
-      return Card(
-        color: Colors.blueGrey,
-        child: LabelNodeWidget(nodeData: node),
-      );
-    }
-
-    Card createProjectTile(ProjectNode node) {
-      return Card(
-        color: Colors.green,
-        child: ProjectNodeWidget(nodeData: node),
-      );
-    }
-
-    // Widget createProjectWidget(ProjectNode project) {
-    //   return createProjectTile(project);
-    // }
-
-    // Widget createAccountWidget(LabelNode account) {
-    //   return Flex(
-    //     direction: Axis.horizontal,
-    //     mainAxisAlignment: MainAxisAlignment.center,
-    //     crossAxisAlignment: CrossAxisAlignment.center,
-    //     children: [
-    //       createLabelTile(account),
-    //       Flex(
-    //         direction: Axis.vertical,
-    //         mainAxisAlignment: MainAxisAlignment.center,
-    //         crossAxisAlignment: CrossAxisAlignment.center,
-    //         children: account.children.values
-    //             .map((project) => createProjectWidget(project as ProjectNode))
-    //             .toList(),
-    //       ),
-    //     ],
-    //   );
-    // }
-
-    // Widget createSquadWidget(LabelNode squad) {
-    //   return Flex(
-    //     direction: Axis.horizontal,
-    //     mainAxisAlignment: MainAxisAlignment.center,
-    //     crossAxisAlignment: CrossAxisAlignment.center,
-    //     children: [
-    //       createLabelTile(squad),
-    //       // Flex(
-    //       //   direction: Axis.vertical,
-    //       //   mainAxisAlignment: MainAxisAlignment.center,
-    //       //   crossAxisAlignment: CrossAxisAlignment.center,
-    //       //   children: squad.children.values
-    //       //       .map((account) => createAccountWidget(account as LabelNode))
-    //       //       .toList(),
-    //       // ),
-    //     ],
-    //   );
-    // }
-
-    // Widget createMarketWidget(LabelNode market) {
-    //   return Flex(
-    //     direction: Axis.horizontal,
-    //     mainAxisAlignment: MainAxisAlignment.center,
-    //     crossAxisAlignment: CrossAxisAlignment.center,
-    //     children: [
-    //       createLabelTile(market),
-    //       Column(
-    //         // direction: Axis.vertical,
-    //         mainAxisAlignment: MainAxisAlignment.center,
-    //         crossAxisAlignment: CrossAxisAlignment.center,
-    //         children: market.children.values
-    //             .map((squad) => createSquadWidget(squad as LabelNode))
-    //             .toList(),
-    //       ),
-    //     ],
-    //   );
-    // }
-
-    // Widget createGeoWidget(LabelNode geo) {
-    //   return Row(
-    //     mainAxisAlignment: MainAxisAlignment.center,
-    //     children: [
-    //       createLabelTile(geo),
-    //       Column(
-    //         // direction: Axis.vertical,
-    //         mainAxisAlignment: MainAxisAlignment.center,
-    //         children: geo.children.values
-    //             .map((market) => createMarketWidget(market as LabelNode))
-    //             .toList(),
-    //       ),
-    //     ],
-    //   );
-    // }
-
-    // Widget createRootWidget(ProjectStructure projectStructure) {
-    //   return Row(
-    //     children: [
-    //       createLabelTile(projectStructure.root),
-    //       Column(
-    //           // direction: Axis.vertical,
-    //           mainAxisAlignment: MainAxisAlignment.center,
-    //           children: projectStructure.root.children.values
-    //               .map((geo) => createGeoWidget(geo as LabelNode))
-    //               .toList()),
-    //     ],
-    //   );
-    // }
-
-    List<Widget> tiles = [];
-    List<Card> projectWidgets = [];
-
-    for (var geo in projectStructure.root.children.values) {
-      tiles.add(
-        createLabelTile(geo as GeoNode),
-      );
-      for (var market in geo.children.values) {
-        tiles.add(
-          createLabelTile(market as MarketNode),
-        );
-        for (var squad in market.children.values) {
-          tiles.add(
-            createLabelTile(squad as SquadNode),
-          );
-          for (var account in squad.children.values) {
-            tiles.add(
-              createLabelTile(account as AccountNode),
-            );
-            for (var project in account.children.values) {
-              var p = createProjectTile(project as ProjectNode);
-              tiles.add(p);
-              projectWidgets.add(p);
-            }
-          }
-        }
-      }
+    if (filteredProjects.isEmpty) {
+      return const CircularProgressIndicator();
     }
 
     return Padding(
@@ -230,30 +83,73 @@ class MindMap extends HookConsumerWidget {
               ),
             ],
           ),
-          SingleChildScrollView(
-            // child: createRootWidget(projectStructure),
-            child: Column(
-              children: [
-                WidgetSize(
-                    key: const Key("p1"),
-                    onChange: (newSize) =>
-                        log("p1 callBackCalled with: $newSize"),
-                    child: projectWidgets[0]),
-                WidgetSize(
-                    key: const Key("p2"),
-                    onChange: (newSize) =>
-                        log("p2 callBackCalled with: $newSize"),
-                    child: projectWidgets[1]),
-                WidgetSize(
-                    key: const Key("p3"),
-                    onChange: (newSize) =>
-                        log("p3 callBackCalled with: $newSize"),
-                    child: projectWidgets[2]),
-              ],
+          Expanded(
+            child: CustomScrollView(
+              slivers: <List<Widget>>[
+                section(
+                    context: context,
+                    sectionTitle: "Worldwide",
+                    nodeWidgets: [
+                      WorldwideTile(node: wwNode),
+                    ]),
+                section(
+                    context: context,
+                    sectionTitle: "Geographies",
+                    nodeWidgets:
+                        filteredGeos.map((g) => GeoTile(node: g)).toList()),
+                section(
+                    context: context,
+                    sectionTitle: "Markets",
+                    nodeWidgets: filteredMarkets
+                        .map((m) => MarketTile(node: m))
+                        .toList()),
+                section(
+                    context: context,
+                    sectionTitle: "Squads",
+                    nodeWidgets:
+                        filteredSquads.map((s) => SquadTile(node: s)).toList()),
+                section(
+                    context: context,
+                    sectionTitle: "Accounts",
+                    nodeWidgets: filteredAccounts
+                        .map((a) => AccountTile(node: a))
+                        .toList()),
+                section(
+                    context: context,
+                    sectionTitle: "Projects",
+                    nodeWidgets: filteredProjects
+                        .map((p) => ProjectTile(node: p))
+                        .toList()),
+              ].expand((x) => x).toList(),
             ),
-          ),
+          )
         ],
       ),
     );
+  }
+
+  List<Widget> section({
+    required BuildContext context,
+    required String sectionTitle,
+    required List<Widget> nodeWidgets,
+    double widgetExtentMultple = 16,
+  }) {
+    return <Widget>[
+      SliverToBoxAdapter(
+        child: Text(
+          sectionTitle,
+          style: Theme.of(context)
+              .textTheme
+              .headline5!
+              .copyWith(decoration: TextDecoration.underline),
+        ),
+      ),
+      SliverGrid.extent(
+        maxCrossAxisExtent: Theme.of(context).textTheme.titleLarge!.fontSize! *
+            widgetExtentMultple,
+        childAspectRatio: 3.5,
+        children: nodeWidgets,
+      ),
+    ];
   }
 }
