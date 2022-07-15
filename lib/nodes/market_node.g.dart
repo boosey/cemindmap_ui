@@ -7,11 +7,11 @@ part of 'market_node.dart';
 // **************************************************************************
 
 MarketNode _$MarketNodeFromJson(Map<String, dynamic> json) => MarketNode()
-  ..marketName = json['marketName'] as String
+  ..name = json['name'] as String
   ..geoNode = GeoNode.fromJson(json['geoNode'] as Map<String, dynamic>);
 
 Map<String, dynamic> _$MarketNodeToJson(MarketNode instance) =>
     <String, dynamic>{
-      'marketName': instance.marketName,
+      'name': instance.name,
       'geoNode': instance.geoNode.toJson(),
     };

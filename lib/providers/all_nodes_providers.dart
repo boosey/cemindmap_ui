@@ -4,12 +4,12 @@ import 'package:cemindmap_ui/nodes/geo_node.dart';
 import 'package:cemindmap_ui/nodes/market_node.dart';
 import 'package:cemindmap_ui/nodes/project_node.dart';
 import 'package:cemindmap_ui/nodes/squad_node.dart';
-import 'package:cemindmap_ui/nodes/ww_node.dart';
+// import 'package:cemindmap_ui/nodes/ww_node.dart.disabled';
 import 'package:flutter_data/flutter_data.dart';
 import 'package:cemindmap_ui/main.data.dart';
 
 class NodesFromRawProjectsData {
-  final WWNode wwNode = WWNode(key: 'ww_node');
+  // final WWNode wwNode = WWNode(key: 'ww_node');
   final Set<GeoNode> geos = {};
   final Set<MarketNode> markets = {};
   final Set<SquadNode> squads = {};
@@ -20,14 +20,13 @@ class NodesFromRawProjectsData {
     // Create nodes from raw project data
 
     for (var rawProject in rawProjects) {
-      final currentGeo =
-          GeoNode.fromRawProject(rawProject: rawProject, worldwideNode: wwNode);
+      final currentGeo = GeoNode.fromRawProject(rawProject: rawProject);
       final currentMarket = MarketNode.fromRawProject(
           rawProject: rawProject, geoNode: currentGeo);
       final currentSquad = SquadNode.fromRawProject(
           rawProject: rawProject, marketNode: currentMarket);
       final currentAccount = AccountNode.fromRawProject(
-          rawProject: rawProject, squad: currentSquad);
+          rawProject: rawProject, squadNode: currentSquad);
       final currentProject = ProjectNode.fromRawProject(
           rawProject: rawProject, account: currentAccount);
 
@@ -36,6 +35,10 @@ class NodesFromRawProjectsData {
       squads.add(currentSquad);
       accounts.add(currentAccount);
       projects.add(currentProject);
+
+      if (projects.length >= 100) {
+        break;
+      }
     }
   }
 }
@@ -53,10 +56,10 @@ final nodesFromRawProjectsDataProvider = StateNotifierProvider<
       rawProjects: rawProjects.hasModel ? rawProjects.model! : []));
 });
 
-final worldwideNodeProvider = Provider<WWNode>((ref) {
-  final nodes = ref.watch(nodesFromRawProjectsDataProvider);
-  return nodes.wwNode;
-});
+// final worldwideNodeProvider = Provider<WWNode>((ref) {
+//   final nodes = ref.watch(nodesFromRawProjectsDataProvider);
+//   return nodes.wwNode;
+// });
 
 final geosProvider = Provider<Set<GeoNode>>((ref) {
   final nodes = ref.watch(nodesFromRawProjectsDataProvider);

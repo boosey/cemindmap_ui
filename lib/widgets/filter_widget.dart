@@ -1,40 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../providers/set_provider.dart';
-
 class FilterWidget extends ConsumerWidget {
   final String label;
-  final Provider<Set<String>> itemSetProvider;
-  final StateNotifierProvider<FilterSelection, String> selectionProvider;
+  final Set<String> items;
+  final String selected;
+  final Function(String) onChanged;
 
   const FilterWidget({
     Key? key,
-    required this.itemSetProvider,
-    required this.selectionProvider,
+    required this.items,
+    required this.selected,
     required this.label,
+    required this.onChanged,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var items = ref.watch(itemSetProvider);
+    var dropdownItems = createDropdownItems(items);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Row(
       children: [
-        Text(
-          label,
-          textAlign: TextAlign.left,
-        ),
-        DropdownButton<String>(
-          items: createDropdownItems(items),
-          value: ref.read(selectionProvider).isNotEmpty
-              ? ref.read(selectionProvider)
-              : items.first,
-          // When the user interacts with the dropdown, we update the provider state.
-          onChanged: (value) {
-            ref.read(selectionProvider.notifier).selection(value!);
-          },
+        const Padding(padding: EdgeInsets.all(10)),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              label,
+              textAlign: TextAlign.left,
+            ),
+            DropdownButton<String>(
+              items: dropdownItems,
+              value: selected,
+              // When the user interacts with the dropdown, we update the provider state.
+              onChanged: (value) => onChanged(value!),
+            ),
+          ],
         ),
       ],
     );
@@ -43,8 +44,8 @@ class FilterWidget extends ConsumerWidget {
   List<DropdownMenuItem<String>> createDropdownItems(Set<String> items) {
     final dropdownItems = <DropdownMenuItem<String>>[];
 
-    for (var g in items) {
-      dropdownItems.add(DropdownMenuItem(value: g, child: Text(g)));
+    for (var i in items) {
+      dropdownItems.add(DropdownMenuItem(value: i, child: Text(i)));
     }
 
     return dropdownItems;

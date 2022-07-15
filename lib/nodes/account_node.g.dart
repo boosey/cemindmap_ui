@@ -7,15 +7,15 @@ part of 'account_node.dart';
 // **************************************************************************
 
 AccountNode _$AccountNodeFromJson(Map<String, dynamic> json) => AccountNode()
+  ..name = json['name'] as String
   ..accountId = json['accountId'] as String
-  ..accountName = json['accountName'] as String
   ..parentAccountId = json['parentAccountId'] as String
-  ..squad = SquadNode.fromJson(json['squad'] as Map<String, dynamic>);
+  ..squadNode = SquadNode.fromJson(json['squadNode'] as Map<String, dynamic>);
 
 Map<String, dynamic> _$AccountNodeToJson(AccountNode instance) =>
     <String, dynamic>{
+      'name': instance.name,
       'accountId': instance.accountId,
-      'accountName': instance.accountName,
       'parentAccountId': instance.parentAccountId,
-      'squad': instance.squad.toJson(),
+      'squadNode': instance.squadNode.toJson(),
     };

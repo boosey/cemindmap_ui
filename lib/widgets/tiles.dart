@@ -41,7 +41,7 @@ class AccountTile extends StatelessWidget {
       color: Colors.lightGreen,
       clipBehavior: Clip.antiAlias,
       child: ListTile(
-        title: Text(node.accountName),
+        title: Text(node.name),
         subtitle: const Text('Account'),
       ),
     );
@@ -62,7 +62,7 @@ class SquadTile extends StatelessWidget {
       color: const Color.fromARGB(255, 155, 63, 198),
       clipBehavior: Clip.antiAlias,
       child: ListTile(
-        title: Text(node.squadName),
+        title: Text(node.name),
         subtitle: const Text('Squad'),
       ),
     );
@@ -83,7 +83,7 @@ class MarketTile extends StatelessWidget {
       color: Colors.deepPurple,
       clipBehavior: Clip.antiAlias,
       child: ListTile(
-        title: Text(node.marketName),
+        title: Text(node.name),
         subtitle: const Text('Market'),
       ),
     );

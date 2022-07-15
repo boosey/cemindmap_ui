@@ -8,18 +8,16 @@ part 'market_node.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class MarketNode extends NodeData {
-  MarketNode() : super(key: 'na');
+  MarketNode() : super(key: 'na', name: "N/A");
 
   MarketNode.fromRawProject({
     required RawProject rawProject,
     required this.geoNode,
   }) : super(
             key: rawProject.market ??
-                "no name market in project id ${rawProject.projectId}") {
-    marketName = rawProject.market!;
-  }
+                "no name market in project id ${rawProject.projectId}",
+            name: rawProject.market ?? "N/A");
 
-  late String marketName;
   late GeoNode geoNode;
 
   factory MarketNode.fromJson(Map<String, dynamic> data) =>

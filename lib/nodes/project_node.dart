@@ -8,12 +8,12 @@ part 'project_node.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class ProjectNode extends NodeData {
-  ProjectNode() : super(key: 'na');
+  ProjectNode() : super(key: 'N/A', name: "N/A");
   ProjectNode.fromRawProject({
     required this.rawProject,
     required this.account,
     super.isProject = true,
-  }) : super(key: rawProject.projectId!);
+  }) : super(key: rawProject.projectId!, name: rawProject.projectName ?? "N/A");
 
   late RawProject rawProject;
   late AccountNode account;

@@ -1,6 +1,7 @@
 abstract class NodeData {
   NodeData({
     required this.key,
+    required this.name,
     this.isRoot = false,
     this.isProject = false,
     this.isSelected = false,
@@ -8,6 +9,7 @@ abstract class NodeData {
   });
 
   final String key;
+  late String name;
   final bool isRoot;
   final bool isProject;
   final bool isSelected;

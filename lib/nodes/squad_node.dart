@@ -8,18 +8,16 @@ part 'squad_node.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class SquadNode extends NodeData {
-  SquadNode() : super(key: 'na');
+  SquadNode() : super(key: 'N/A', name: "N/A");
 
   SquadNode.fromRawProject({
     required RawProject rawProject,
     required this.marketNode,
   }) : super(
             key: rawProject.geoMarketSquad ??
-                "no name squad in project id ${rawProject.projectId}") {
-    squadName = rawProject.geoMarketSquad!;
-  }
+                "no name squad in project id ${rawProject.projectId}",
+            name: rawProject.geoMarketSquad ?? "N/A");
 
-  late String squadName;
   late MarketNode marketNode;
 
   factory SquadNode.fromJson(Map<String, dynamic> data) =>

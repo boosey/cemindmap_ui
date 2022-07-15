@@ -1,4 +1,4 @@
-import 'package:cemindmap_ui/nodes/ww_node.dart';
+import 'package:cemindmap_ui/nodes/ww_node.dart.disabled';
 import 'package:flutter/material.dart';
 
 class WorldwideTile extends StatelessWidget {

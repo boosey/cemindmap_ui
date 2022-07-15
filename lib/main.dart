@@ -1,11 +1,8 @@
 import 'package:cemindmap_ui/main.data.dart';
+import 'package:cemindmap_ui/providers/filter_provider.dart';
 import 'package:cemindmap_ui/providers/filtered_nodes_providers.dart';
-import 'package:cemindmap_ui/providers/all_nodes_providers.dart';
-import 'package:cemindmap_ui/providers/set_provider.dart';
 import 'package:cemindmap_ui/widgets/filter_widget.dart';
 import 'package:cemindmap_ui/widgets/tiles.dart';
-import 'package:cemindmap_ui/widgets/view_by_widget.dart';
-import 'package:cemindmap_ui/widgets/worldwide_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -43,12 +40,13 @@ class MindMap extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final wwNode = ref.watch(worldwideNodeProvider);
-    final filteredGeos = ref.watch(filteredGeosProvider);
-    final filteredMarkets = ref.watch(filteredMarketsProvider);
-    final filteredSquads = ref.watch(filteredSquadProvider);
-    final filteredAccounts = ref.watch(filteredAccountsProvider);
-    final filteredProjects = ref.watch(filteredProjectsProvider);
+    final filteredGeos = ref.watch(filteredGeoNodesProvider);
+    final filteredMarkets = ref.watch(filteredMarketNodesProvider);
+    final filteredSquads = ref.watch(filteredSquadNodesProvider);
+    final filteredAccounts = ref.watch(filteredAccountNodesProvider);
+    final filteredProjects = ref.watch(filteredProjectNodesProvider);
+
+    final filter = ref.watch(filterProvider);
 
     if (filteredProjects.isEmpty) {
       return const CircularProgressIndicator();
@@ -60,38 +58,43 @@ class MindMap extends HookConsumerWidget {
         children: [
           Row(
             children: [
-              ViewByWidget(),
               FilterWidget(
                 label: "Geography",
-                itemSetProvider: geoSetProvider,
-                selectionProvider: geoSelectionProvider,
+                items: filter.geoOptions,
+                selected: filter.geoSelection,
+                onChanged: (value) => ref
+                    .read<FilterNotifier>(filterProvider.notifier)
+                    .geoSelection = value,
               ),
               FilterWidget(
                 label: "Market",
-                itemSetProvider: marketSetProvider,
-                selectionProvider: marketSelectionProvider,
+                items: filter.marketOptions,
+                selected: filter.marketSelection,
+                onChanged: (value) => ref
+                    .read<FilterNotifier>(filterProvider.notifier)
+                    .marketSelection = value,
               ),
               FilterWidget(
                 label: "Squad",
-                itemSetProvider: squadSetProvider,
-                selectionProvider: squadSelectionProvider,
+                items: filter.squadOptions,
+                selected: filter.squadSelection,
+                onChanged: (value) => ref
+                    .read<FilterNotifier>(filterProvider.notifier)
+                    .squadSelection = value,
               ),
               FilterWidget(
                 label: "Account",
-                itemSetProvider: accountSetProvider,
-                selectionProvider: accountSelectionProvider,
+                items: filter.accountOptions,
+                selected: filter.accountSelection,
+                onChanged: (value) => ref
+                    .read<FilterNotifier>(filterProvider.notifier)
+                    .accountSelection = value,
               ),
             ],
           ),
           Expanded(
             child: CustomScrollView(
               slivers: <List<Widget>>[
-                section(
-                    context: context,
-                    sectionTitle: "Worldwide",
-                    nodeWidgets: [
-                      WorldwideTile(node: wwNode),
-                    ]),
                 section(
                     context: context,
                     sectionTitle: "Geographies",

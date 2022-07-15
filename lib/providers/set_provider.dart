@@ -1,109 +1,98 @@
-import 'package:cemindmap_ui/main.data.dart';
-import 'package:cemindmap_ui/models/raw_project.dart';
+import 'package:cemindmap_ui/nodes/account_node.dart';
+import 'package:cemindmap_ui/nodes/market_node.dart';
+import 'package:cemindmap_ui/nodes/node_data.dart';
+import 'package:cemindmap_ui/nodes/squad_node.dart';
+import 'package:cemindmap_ui/providers/all_nodes_providers.dart';
+import 'package:cemindmap_ui/providers/filtered_nodes_providers.dart';
 import 'package:flutter_data/flutter_data.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 Provider<Set<String>> setProvider({
-  required String Function(RawProject) keyFunction,
-  required bool Function(String, RawProject) selectionFunction,
-  bool includeAllOption = false,
+  required bool Function(String, NodeData) selectionFunction,
+  required Provider<Set<NodeData>> nodeSet,
   StateNotifierProvider<FilterSelection, String>? parentSelectionProvider,
 }) {
   return Provider<Set<String>>((ref) {
-    var projects = ref.rawProjects.watchAll();
+    final filteredNodes = ref.watch(nodeSet);
     String parentSelection;
     if (parentSelectionProvider != null) {
       parentSelection = ref.watch(parentSelectionProvider);
     } else {
-      parentSelection = "";
+      parentSelection = "All";
     }
 
-    var set = <String>{};
+    var set = <String>{"All"};
 
-    if (projects.hasModel) {
-      if (includeAllOption) {
-        set.add("All");
-      }
-      for (var p in projects.model!) {
-        var s = keyFunction(p);
-        if (selectionFunction(parentSelection, p) || parentSelection.isEmpty) {
-          set.add(s);
-        }
+    for (var p in filteredNodes) {
+      if (selectionFunction(parentSelection, p) ||
+          parentSelection.isEmpty ||
+          parentSelection == "All") {
+        set.add(p.name);
       }
     }
+
     return set;
   });
 }
 
 class FilterSelection extends StateNotifier<String> {
-  FilterSelection({required this.set}) : super(set.isNotEmpty ? set.first : "");
-
-  final Set<String> set;
+  FilterSelection() : super("All");
 
   selection(String choice) {
     state = choice;
   }
 }
 
-final geoSelectionProvider =
+final StateNotifierProvider<FilterSelection, String> geoSelectionProvider =
     StateNotifierProvider<FilterSelection, String>((ref) {
-  final geoSet = ref.watch(geoSetProvider);
-  return FilterSelection(
-    set: geoSet,
-  );
+  return FilterSelection();
 });
 
-final marketSelectionProvider =
+final StateNotifierProvider<FilterSelection, String> marketSelectionProvider =
     StateNotifierProvider<FilterSelection, String>((ref) {
-  final marketSet = ref.watch(marketSetProvider);
-  return FilterSelection(
-    set: marketSet,
-  );
+  return FilterSelection();
 });
 
-final squadSelectionProvider =
+final StateNotifierProvider<FilterSelection, String> squadSelectionProvider =
     StateNotifierProvider<FilterSelection, String>((ref) {
-  final squadSet = ref.watch(squadSetProvider);
-  return FilterSelection(
-    set: squadSet,
-  );
+  return FilterSelection();
 });
 
-final accountSelectionProvider =
+final StateNotifierProvider<FilterSelection, String> accountSelectionProvider =
     StateNotifierProvider<FilterSelection, String>((ref) {
-  final accountSet = ref.watch(accountSetProvider);
-  return FilterSelection(
-    set: accountSet,
-  );
+  return FilterSelection();
 });
 
-final geoSetProvider = setProvider(
-  keyFunction: (p) => p.geo!,
+final geoFilterOptionsProvider = setProvider(
+  nodeSet: filteredGeoNodesProvider,
   selectionFunction: (p, s) {
     return true;
   },
 );
 
-final marketSetProvider = setProvider(
-  keyFunction: (p) => p.market!,
-  selectionFunction: (parentSelection, project) =>
-      project.geo == parentSelection,
+final marketFilterOptionsProvider = setProvider(
+  nodeSet: marketsProvider,
+  selectionFunction: (geoSelection, item) {
+    final m = item as MarketNode;
+    return m.geoNode.name == geoSelection;
+  },
   parentSelectionProvider: geoSelectionProvider,
-  includeAllOption: true,
 );
 
-final squadSetProvider = setProvider(
-  keyFunction: (p) => p.geoMarketSquad!,
-  selectionFunction: (marketSelection, project) =>
-      project.market == marketSelection,
+final squadFilterOptionsProvider = setProvider(
+  nodeSet: squadsProvider,
+  selectionFunction: (marketSelection, item) {
+    final s = item as SquadNode;
+    return s.marketNode.name == marketSelection;
+  },
   parentSelectionProvider: marketSelectionProvider,
-  includeAllOption: true,
 );
 
-final accountSetProvider = setProvider(
-  keyFunction: (p) => p.accountName!,
-  selectionFunction: (squadSelection, project) =>
-      project.geoMarketSquad == squadSelection,
+final accountFilterOptionsProvider = setProvider(
+  nodeSet: accountsProvider,
+  selectionFunction: (squadSelection, node) {
+    final a = node as AccountNode;
+    return a.squadNode.name == squadSelection;
+  },
   parentSelectionProvider: squadSelectionProvider,
-  includeAllOption: true,
 );
