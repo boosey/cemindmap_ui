@@ -82,40 +82,55 @@ class FilterNotifier extends StateNotifier<Filter> {
       );
 
   set marketSelection(String s) => state = state.copyWith(
-        geoSelection:
-            state.allMarketNodes.firstWhere((m) => m.name == s).geoNode.name,
         marketSelection: s,
+        geoSelection: s == allString
+            ? state.geoSelection
+            : state.allMarketNodes.firstWhere((m) => m.name == s).geoNode.name,
         squadSelection: allString,
         accountSelection: allString,
       );
 
   set squadSelection(String s) => state = state.copyWith(
         squadSelection: s,
-        geoSelection: state.allSquadNodes
-            .firstWhere((q) => q.name == s)
-            .marketNode
-            .geoNode
-            .name,
-        marketSelection:
-            state.allSquadNodes.firstWhere((q) => q.name == s).marketNode.name,
+        geoSelection: s == allString
+            ? state.geoSelection
+            : state.allSquadNodes
+                .firstWhere((q) => q.name == s)
+                .marketNode
+                .geoNode
+                .name,
+        marketSelection: s == allString
+            ? state.marketSelection
+            : state.allSquadNodes
+                .firstWhere((q) => q.name == s)
+                .marketNode
+                .name,
         accountSelection: allString,
       );
 
   set accountSelection(String s) => state = state.copyWith(
         accountSelection: s,
-        geoSelection: state.allAccountNodes
-            .firstWhere((a) => a.name == s)
-            .squadNode
-            .marketNode
-            .geoNode
-            .name,
-        marketSelection: state.allAccountNodes
-            .firstWhere((a) => a.name == s)
-            .squadNode
-            .marketNode
-            .name,
-        squadSelection:
-            state.allAccountNodes.firstWhere((a) => a.name == s).squadNode.name,
+        geoSelection: s == allString
+            ? state.geoSelection
+            : state.allAccountNodes
+                .firstWhere((a) => a.name == s)
+                .squadNode
+                .marketNode
+                .geoNode
+                .name,
+        marketSelection: s == allString
+            ? state.marketSelection
+            : state.allAccountNodes
+                .firstWhere((a) => a.name == s)
+                .squadNode
+                .marketNode
+                .name,
+        squadSelection: s == allString
+            ? state.squadSelection
+            : state.allAccountNodes
+                .firstWhere((a) => a.name == s)
+                .squadNode
+                .name,
       );
 }
 

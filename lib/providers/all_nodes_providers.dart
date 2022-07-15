@@ -36,9 +36,9 @@ class NodesFromRawProjectsData {
       accounts.add(currentAccount);
       projects.add(currentProject);
 
-      if (projects.length >= 100) {
-        break;
-      }
+      // if (projects.length >= 100) {
+      //   break;
+      // }
     }
   }
 }
@@ -55,11 +55,6 @@ final nodesFromRawProjectsDataProvider = StateNotifierProvider<
   return NodesFromRawProjectsDataStateNotifier(NodesFromRawProjectsData(
       rawProjects: rawProjects.hasModel ? rawProjects.model! : []));
 });
-
-// final worldwideNodeProvider = Provider<WWNode>((ref) {
-//   final nodes = ref.watch(nodesFromRawProjectsDataProvider);
-//   return nodes.wwNode;
-// });
 
 final geosProvider = Provider<Set<GeoNode>>((ref) {
   final nodes = ref.watch(nodesFromRawProjectsDataProvider);
