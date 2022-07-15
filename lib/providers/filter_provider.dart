@@ -39,20 +39,25 @@ class Filter {
       {allString}..addAll(allGeoNodes.map((e) => e.name));
 
   Set<String> get marketOptions => {allString}..addAll(allMarketNodes
-      .where((n) => n.geoNode.name == geoSelection)
+      .where(
+          (n) => (n.geoNode.name == geoSelection || geoSelection == allString))
       .map((e) => e.name));
 
   Set<String> get squadOptions => {allString}..addAll(allSquadNodes
       .where((n) =>
-          n.marketNode.geoNode.name == geoSelection &&
-          n.marketNode.name == marketSelection)
+          (n.marketNode.geoNode.name == geoSelection ||
+              geoSelection == allString) &&
+          (n.marketNode.name == marketSelection ||
+              marketSelection == allString))
       .map((e) => e.name));
 
   Set<String> get accountOptions => {allString}..addAll(allAccountNodes
       .where((n) =>
-          n.squadNode.marketNode.geoNode.name == geoSelection &&
-          n.squadNode.marketNode.name == marketSelection &&
-          n.squadNode.name == squadSelection)
+          (n.squadNode.marketNode.geoNode.name == geoSelection ||
+              geoSelection == allString) &&
+          (n.squadNode.marketNode.name == marketSelection ||
+              marketSelection == allString) &&
+          (n.squadNode.name == squadSelection || squadSelection == allString))
       .map((e) => e.name));
 }
 
@@ -70,20 +75,48 @@ class FilterNotifier extends StateNotifier<Filter> {
         ));
 
   set geoSelection(String s) => state = state.copyWith(
-      geoSelection: s,
-      marketSelection: allString,
-      squadSelection: allString,
-      accountSelection: allString);
+        geoSelection: s,
+        marketSelection: allString,
+        squadSelection: allString,
+        accountSelection: allString,
+      );
 
   set marketSelection(String s) => state = state.copyWith(
-      marketSelection: s,
-      squadSelection: allString,
-      accountSelection: allString);
+        geoSelection:
+            state.allMarketNodes.firstWhere((m) => m.name == s).geoNode.name,
+        marketSelection: s,
+        squadSelection: allString,
+        accountSelection: allString,
+      );
 
-  set squadSelection(String s) =>
-      state = state.copyWith(squadSelection: s, accountSelection: allString);
+  set squadSelection(String s) => state = state.copyWith(
+        squadSelection: s,
+        geoSelection: state.allSquadNodes
+            .firstWhere((q) => q.name == s)
+            .marketNode
+            .geoNode
+            .name,
+        marketSelection:
+            state.allSquadNodes.firstWhere((q) => q.name == s).marketNode.name,
+        accountSelection: allString,
+      );
 
-  set accountSelection(String s) => state = state.copyWith(accountSelection: s);
+  set accountSelection(String s) => state = state.copyWith(
+        accountSelection: s,
+        geoSelection: state.allAccountNodes
+            .firstWhere((a) => a.name == s)
+            .squadNode
+            .marketNode
+            .geoNode
+            .name,
+        marketSelection: state.allAccountNodes
+            .firstWhere((a) => a.name == s)
+            .squadNode
+            .marketNode
+            .name,
+        squadSelection:
+            state.allAccountNodes.firstWhere((a) => a.name == s).squadNode.name,
+      );
 }
 
 final filterProvider = StateNotifierProvider<FilterNotifier, Filter>((ref) {

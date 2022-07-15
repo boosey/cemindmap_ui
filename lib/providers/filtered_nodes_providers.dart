@@ -4,7 +4,7 @@ import 'package:cemindmap_ui/nodes/market_node.dart';
 import 'package:cemindmap_ui/nodes/project_node.dart';
 import 'package:cemindmap_ui/nodes/squad_node.dart';
 import 'package:cemindmap_ui/providers/all_nodes_providers.dart';
-import 'package:cemindmap_ui/providers/set_provider.dart';
+import 'package:cemindmap_ui/providers/filter_provider.dart';
 import 'package:flutter_data/flutter_data.dart';
 
 final searchTermProvider = Provider<String>(
@@ -13,20 +13,17 @@ final searchTermProvider = Provider<String>(
 
 final filteredGeoNodesProvider = Provider<Set<GeoNode>>((ref) {
   final geos = ref.watch(geosProvider);
-  final geoSelection = ref.watch(geoSelectionProvider);
+  final filter = ref.watch(filterProvider);
   // final term = ref.watch(searchTermProvider);
 
   bool Function(GeoNode) getGeoSelectionFunction(String geoSelection) {
-    // if (geoSelection.isEmpty) {
-    //   geoSelection = "All";
-    // }
     return geoSelection == "All"
         ? (p0) => true
         : (p0) => p0.name == geoSelection;
   }
 
   bool Function(GeoNode) geoSelectionFunction =
-      getGeoSelectionFunction(geoSelection);
+      getGeoSelectionFunction(filter.geoSelection);
 
   final filtered = geos.where((a) => geoSelectionFunction(a)).toSet();
 
@@ -34,59 +31,50 @@ final filteredGeoNodesProvider = Provider<Set<GeoNode>>((ref) {
 
   // final searched = filtered.toList().where((a) => a.search(term)).toSet();
 
+  // return searched;
+
   return filtered;
 });
 
 final filteredMarketNodesProvider = Provider<Set<MarketNode>>((ref) {
   final markets = ref.watch(marketsProvider);
-  final geoSelection = ref.watch(geoSelectionProvider);
-  final marketSelection = ref.watch(marketSelectionProvider);
-  final term = ref.watch(searchTermProvider);
+  final filter = ref.watch(filterProvider);
+  // final term = ref.watch(searchTermProvider);
 
   bool Function(MarketNode) getGeoSelectionFunction(String geoSelection) {
-    // if (geoSelection.isEmpty) {
-    //   geoSelection = "All";
-    //   ref.read(geoSelectionProvider.notifier).selection(geoSelection);
-    // }
     return geoSelection == "All"
         ? (p0) => true
         : (p0) => p0.geoNode.name == geoSelection;
   }
 
   bool Function(MarketNode) getMarketSelectionFunction(String marketSelection) {
-    // if (marketSelection.isEmpty) {
-    //   marketSelection = "All";
-    // }
     return marketSelection == "All"
         ? (p0) => true
         : (p0) => p0.name == marketSelection;
   }
 
   bool Function(MarketNode) marketSelectionFunction =
-      getMarketSelectionFunction(marketSelection);
+      getMarketSelectionFunction(filter.marketSelection);
   bool Function(MarketNode) geoSelectionFunction =
-      getGeoSelectionFunction(geoSelection);
+      getGeoSelectionFunction(filter.geoSelection);
 
   final filtered = markets
       .where((a) => marketSelectionFunction(a) && geoSelectionFunction(a))
       .toSet();
 
-  final searched = filtered.toList().where((a) => a.search(term)).toSet();
+  // final searched = filtered.toList().where((a) => a.search(term)).toSet();
 
-  return searched;
+  // return searched;
+
+  return filtered;
 });
 
 final filteredSquadNodesProvider = Provider<Set<SquadNode>>((ref) {
   final squads = ref.watch(squadsProvider);
-  final geoSelection = ref.watch(geoSelectionProvider);
-  final marketSelection = ref.watch(marketSelectionProvider);
-  final squadSelection = ref.watch(squadSelectionProvider);
-  final term = ref.watch(searchTermProvider);
+  final filter = ref.watch(filterProvider);
+  // final term = ref.watch(searchTermProvider);
 
   bool Function(SquadNode) getGeoSelectionFunction(String geoSelection) {
-    if (geoSelection.isEmpty) {
-      geoSelection = "All";
-    }
     return geoSelection == "All"
         ? (p0) => true
         : (p0) => p0.marketNode.geoNode.name == geoSelection;
@@ -107,11 +95,11 @@ final filteredSquadNodesProvider = Provider<Set<SquadNode>>((ref) {
   }
 
   bool Function(SquadNode) squadSelectionFunction =
-      getSquadSelectionFunction(squadSelection);
+      getSquadSelectionFunction(filter.squadSelection);
   bool Function(SquadNode) marketSelectionFunction =
-      getMarketSelectionFunction(marketSelection);
+      getMarketSelectionFunction(filter.marketSelection);
   bool Function(SquadNode) geoSelectionFunction =
-      getGeoSelectionFunction(geoSelection);
+      getGeoSelectionFunction(filter.geoSelection);
 
   final filtered = squads
       .where((a) =>
@@ -120,23 +108,19 @@ final filteredSquadNodesProvider = Provider<Set<SquadNode>>((ref) {
           geoSelectionFunction(a))
       .toSet();
 
-  final searched = filtered.toList().where((a) => a.search(term)).toSet();
+  // final searched = filtered.toList().where((a) => a.search(term)).toSet();
 
-  return searched;
+  // return searched;
+
+  return filtered;
 });
 
 final filteredAccountNodesProvider = Provider<Set<AccountNode>>((ref) {
   final accounts = ref.watch(accountsProvider);
-  final geoSelection = ref.watch(geoSelectionProvider);
-  final marketSelection = ref.watch(marketSelectionProvider);
-  final squadSelection = ref.watch(squadSelectionProvider);
-  final accountSelection = ref.watch(accountSelectionProvider);
-  final term = ref.watch(searchTermProvider);
+  final filter = ref.watch(filterProvider);
+  // final term = ref.watch(searchTermProvider);
 
   bool Function(AccountNode) getGeoSelectionFunction(String geoSelection) {
-    if (geoSelection.isEmpty) {
-      geoSelection = "All";
-    }
     return geoSelection == "All"
         ? (p0) => true
         : (p0) => p0.squadNode.marketNode.geoNode.name == geoSelection;
@@ -166,13 +150,13 @@ final filteredAccountNodesProvider = Provider<Set<AccountNode>>((ref) {
   }
 
   bool Function(AccountNode) accountSelectionFunction =
-      getAccountSelectionFunction(accountSelection);
+      getAccountSelectionFunction(filter.accountSelection);
   bool Function(AccountNode) squadSelectionFunction =
-      getSquadSelectionFunction(squadSelection);
+      getSquadSelectionFunction(filter.squadSelection);
   bool Function(AccountNode) marketSelectionFunction =
-      getMarketSelectionFunction(marketSelection);
+      getMarketSelectionFunction(filter.marketSelection);
   bool Function(AccountNode) geoSelectionFunction =
-      getGeoSelectionFunction(geoSelection);
+      getGeoSelectionFunction(filter.geoSelection);
 
   final filtered = accounts
       .where((a) =>
@@ -182,23 +166,19 @@ final filteredAccountNodesProvider = Provider<Set<AccountNode>>((ref) {
           geoSelectionFunction(a))
       .toSet();
 
-  final searched = filtered.toList().where((a) => a.search(term)).toSet();
+  // final searched = filtered.toList().where((a) => a.search(term)).toSet();
 
-  return searched;
+  // return searched;
+
+  return filtered;
 });
 
 final filteredProjectNodesProvider = Provider<Set<ProjectNode>>((ref) {
   final projects = ref.watch(projectsProvider);
-  final geoSelection = ref.watch(geoSelectionProvider);
-  final marketSelection = ref.watch(marketSelectionProvider);
-  final squadSelection = ref.watch(squadSelectionProvider);
-  final accountSelection = ref.watch(accountSelectionProvider);
-  final term = ref.watch(searchTermProvider);
+  final filter = ref.watch(filterProvider);
+  // final term = ref.watch(searchTermProvider);
 
   bool Function(ProjectNode) getGeoSelectionFunction(String geoSelection) {
-    if (geoSelection.isEmpty) {
-      geoSelection = "All";
-    }
     return geoSelection == "All"
         ? (p0) => true
         : (p0) => p0.account.squadNode.marketNode.geoNode.name == geoSelection;
@@ -228,13 +208,13 @@ final filteredProjectNodesProvider = Provider<Set<ProjectNode>>((ref) {
   }
 
   bool Function(ProjectNode) accountSelectionFunction =
-      getAccountSelectionFunction(accountSelection);
+      getAccountSelectionFunction(filter.accountSelection);
   bool Function(ProjectNode) squadSelectionFunction =
-      getSquadSelectionFunction(squadSelection);
+      getSquadSelectionFunction(filter.squadSelection);
   bool Function(ProjectNode) marketSelectionFunction =
-      getMarketSelectionFunction(marketSelection);
+      getMarketSelectionFunction(filter.marketSelection);
   bool Function(ProjectNode) geoSelectionFunction =
-      getGeoSelectionFunction(geoSelection);
+      getGeoSelectionFunction(filter.geoSelection);
 
   final filtered = projects
       .where((p) =>
@@ -244,7 +224,8 @@ final filteredProjectNodesProvider = Provider<Set<ProjectNode>>((ref) {
           geoSelectionFunction(p))
       .toSet();
 
-  final searched = filtered.toList().where((a) => a.search(term)).toSet();
+  // final searched = filtered.toList().where((a) => a.search(term)).toSet();
 
-  return searched;
+  // return searched;
+  return filtered;
 });

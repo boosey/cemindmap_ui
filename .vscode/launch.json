@@ -7,7 +7,7 @@
     {
       "name": "cemindmap_ui",
       "request": "launch",
-      "type": "dart"
+      "type": "dart",
     },
     {
       "name": "cemindmap_ui (profile mode)",
