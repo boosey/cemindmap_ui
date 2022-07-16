@@ -1,4 +1,4 @@
-import 'package:cemindmap_ui/providers/filtered_nodes_providers.dart';
+import 'package:cemindmap_ui/providers/filtered_nodes_provider.dart';
 import 'package:cemindmap_ui/widgets/section.dart';
 import 'package:cemindmap_ui/widgets/tiles.dart';
 import 'package:flutter/material.dart';

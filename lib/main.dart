@@ -1,5 +1,4 @@
 import 'package:cemindmap_ui/main.data.dart';
-import 'package:cemindmap_ui/providers/filtered_nodes_providers.dart';
 import 'package:cemindmap_ui/widgets/filter_bar.dart';
 import 'package:cemindmap_ui/widgets/search_widget.dart';
 import 'package:cemindmap_ui/widgets/tiled_display.dart';
@@ -40,12 +39,6 @@ class MindMap extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final filteredProjects = ref.watch(filteredProjectNodesProvider);
-
-    if (filteredProjects.isEmpty) {
-      return const CircularProgressIndicator();
-    }
-
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Column(
