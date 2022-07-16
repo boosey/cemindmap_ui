@@ -15,11 +15,11 @@ class TiledDisplay extends HookConsumerWidget {
     Key? key,
   }) : super(key: key);
 
+  final accountsDisplayCountProvider = StateProvider<int>((ref) => 25);
   final geosDisplayCountProvider = StateProvider<int>((ref) => 25);
   final marketsDisplayCountProvider = StateProvider<int>((ref) => 25);
-  final squadsDisplayCountProvider = StateProvider<int>((ref) => 25);
-  final accountsDisplayCountProvider = StateProvider<int>((ref) => 25);
   final projectsDisplayCountProvider = StateProvider<int>((ref) => 25);
+  final squadsDisplayCountProvider = StateProvider<int>((ref) => 25);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

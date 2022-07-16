@@ -16,15 +16,18 @@ abstract class NodeData {
   final bool isAssignmentListExpanded;
 
   bool search(String term) {
-    final String searchable = convertValuesToSearchable(toJson());
-    return searchable.contains(term);
+    if (term.length >= 3) {
+      final String searchable = convertValuesToSearchable(toJson());
+      return searchable.contains(term.toUpperCase());
+    }
+    return true;
   }
 
   String convertValuesToSearchable(Map<String, dynamic> json) {
     return json.values.fold<String>('', (previousValue, element) {
       final additionalString = element is Map<String, dynamic>
           ? convertValuesToSearchable(element)
-          : element.toString();
+          : element.toString().toUpperCase();
       return previousValue + additionalString;
     });
   }

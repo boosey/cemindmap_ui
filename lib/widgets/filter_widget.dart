@@ -2,11 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FilterWidget extends ConsumerWidget {
-  final String label;
-  final Set<String> items;
-  final String selected;
-  final Function(String) onChanged;
-
   const FilterWidget({
     Key? key,
     required this.items,
@@ -14,6 +9,21 @@ class FilterWidget extends ConsumerWidget {
     required this.label,
     required this.onChanged,
   }) : super(key: key);
+
+  final Set<String> items;
+  final String label;
+  final Function(String) onChanged;
+  final String selected;
+
+  List<DropdownMenuItem<String>> createDropdownItems(Set<String> items) {
+    final dropdownItems = <DropdownMenuItem<String>>[];
+
+    for (var i in items) {
+      dropdownItems.add(DropdownMenuItem(value: i, child: Text(i)));
+    }
+
+    return dropdownItems;
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -39,15 +49,5 @@ class FilterWidget extends ConsumerWidget {
         ),
       ],
     );
-  }
-
-  List<DropdownMenuItem<String>> createDropdownItems(Set<String> items) {
-    final dropdownItems = <DropdownMenuItem<String>>[];
-
-    for (var i in items) {
-      dropdownItems.add(DropdownMenuItem(value: i, child: Text(i)));
-    }
-
-    return dropdownItems;
   }
 }

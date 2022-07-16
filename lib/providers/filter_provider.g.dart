@@ -21,6 +21,8 @@ abstract class _$FilterCWProxy {
 
   Filter marketSelection(String marketSelection);
 
+  Filter searchTerms(String searchTerms);
+
   Filter squadSelection(String squadSelection);
 
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `Filter(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
@@ -37,6 +39,7 @@ abstract class _$FilterCWProxy {
     Set<SquadNode>? allSquadNodes,
     String? geoSelection,
     String? marketSelection,
+    String? searchTerms,
     String? squadSelection,
   });
 }
@@ -75,6 +78,9 @@ class _$FilterCWProxyImpl implements _$FilterCWProxy {
       this(marketSelection: marketSelection);
 
   @override
+  Filter searchTerms(String searchTerms) => this(searchTerms: searchTerms);
+
+  @override
   Filter squadSelection(String squadSelection) =>
       this(squadSelection: squadSelection);
 
@@ -94,6 +100,7 @@ class _$FilterCWProxyImpl implements _$FilterCWProxy {
     Object? allSquadNodes = const $CopyWithPlaceholder(),
     Object? geoSelection = const $CopyWithPlaceholder(),
     Object? marketSelection = const $CopyWithPlaceholder(),
+    Object? searchTerms = const $CopyWithPlaceholder(),
     Object? squadSelection = const $CopyWithPlaceholder(),
   }) {
     return Filter(
@@ -132,6 +139,11 @@ class _$FilterCWProxyImpl implements _$FilterCWProxy {
           ? _value.marketSelection
           // ignore: cast_nullable_to_non_nullable
           : marketSelection as String,
+      searchTerms:
+          searchTerms == const $CopyWithPlaceholder() || searchTerms == null
+              ? _value.searchTerms
+              // ignore: cast_nullable_to_non_nullable
+              : searchTerms as String,
       squadSelection: squadSelection == const $CopyWithPlaceholder() ||
               squadSelection == null
           ? _value.squadSelection

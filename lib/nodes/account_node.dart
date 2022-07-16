@@ -10,6 +10,9 @@ part 'account_node.g.dart';
 class AccountNode extends NodeData {
   AccountNode() : super(key: 'N/A', name: 'N/A');
 
+  factory AccountNode.fromJson(Map<String, dynamic> data) =>
+      _$AccountNodeFromJson(data);
+
   AccountNode.fromRawProject({
     required RawProject rawProject,
     required this.squadNode,
@@ -25,15 +28,13 @@ class AccountNode extends NodeData {
   late String parentAccountId;
   late SquadNode squadNode;
 
-  factory AccountNode.fromJson(Map<String, dynamic> data) =>
-      _$AccountNodeFromJson(data);
-
-  @override
-  Map<String, dynamic> toJson() => _$AccountNodeToJson(this);
   @override
   // ignore: hash_and_equals
   bool operator ==(Object other) =>
       other is AccountNode &&
       other.runtimeType == runtimeType &&
       other.key == key;
+
+  @override
+  Map<String, dynamic> toJson() => _$AccountNodeToJson(this);
 }

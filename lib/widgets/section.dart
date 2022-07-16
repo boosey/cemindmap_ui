@@ -6,12 +6,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 class Section extends HookConsumerWidget {
-  final String sectionTitle;
-  final double widgetExtentMultiple;
-  final StateProvider<int> nodeDisplayCountProvider;
-  final Widget Function(NodeData) delegate;
-  final Provider<Set<NodeData>> filteredNodesProvider;
-
   const Section({
     Key? key,
     required this.sectionTitle,
@@ -20,6 +14,12 @@ class Section extends HookConsumerWidget {
     required this.nodeDisplayCountProvider,
     this.widgetExtentMultiple = 16,
   }) : super(key: key);
+
+  final Widget Function(NodeData) delegate;
+  final Provider<Set<NodeData>> filteredNodesProvider;
+  final StateProvider<int> nodeDisplayCountProvider;
+  final String sectionTitle;
+  final double widgetExtentMultiple;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -59,22 +59,19 @@ class Section extends HookConsumerWidget {
           children: tiles,
         ),
         Visibility(
-          visible: nodeCount < filteredNodes.length,
+          visible: filteredNodes.isNotEmpty && nodeCount < filteredNodes.length,
           child: SliverToBoxAdapter(
             child: Card(
               color: Colors.blueAccent,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 6.0, bottom: 6.0),
-                child: MaterialButton(
-                  onPressed: () {
-                    ref.read(nodeDisplayCountProvider.notifier).state =
-                        min(filteredNodes.length, nodeCount + 25);
-                  },
-                  child: const Text(
-                    "More",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
+              child: MaterialButton(
+                onPressed: () {
+                  ref.read(nodeDisplayCountProvider.notifier).state =
+                      min(filteredNodes.length, nodeCount + 25);
+                },
+                child: const Text(
+                  "More",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
             ),

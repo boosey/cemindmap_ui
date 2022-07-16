@@ -23,8 +23,10 @@ class Filter {
   final String marketSelection;
   final String squadSelection;
   final String accountSelection;
+  final String searchTerms;
 
   Filter({
+    this.searchTerms = '',
     this.geoSelection = allString,
     this.marketSelection = allString,
     this.squadSelection = allString,
@@ -35,29 +37,35 @@ class Filter {
     required this.allAccountNodes,
   });
 
-  Set<String> get geoOptions =>
-      {allString}..addAll(allGeoNodes.map((e) => e.name));
+  Set<String> get geoOptions => {allString}..addAll(
+      allGeoNodes.map((e) => e.name),
+    );
 
   Set<String> get marketOptions => {allString}..addAll(allMarketNodes
       .where(
-          (n) => (n.geoNode.name == geoSelection || geoSelection == allString))
+        (n) => (n.geoNode.name == geoSelection || geoSelection == allString),
+      )
       .map((e) => e.name));
 
   Set<String> get squadOptions => {allString}..addAll(allSquadNodes
-      .where((n) =>
-          (n.marketNode.geoNode.name == geoSelection ||
-              geoSelection == allString) &&
-          (n.marketNode.name == marketSelection ||
-              marketSelection == allString))
+      .where(
+        (n) =>
+            (n.marketNode.geoNode.name == geoSelection ||
+                geoSelection == allString) &&
+            (n.marketNode.name == marketSelection ||
+                marketSelection == allString),
+      )
       .map((e) => e.name));
 
   Set<String> get accountOptions => {allString}..addAll(allAccountNodes
-      .where((n) =>
-          (n.squadNode.marketNode.geoNode.name == geoSelection ||
-              geoSelection == allString) &&
-          (n.squadNode.marketNode.name == marketSelection ||
-              marketSelection == allString) &&
-          (n.squadNode.name == squadSelection || squadSelection == allString))
+      .where(
+        (n) =>
+            (n.squadNode.marketNode.geoNode.name == geoSelection ||
+                geoSelection == allString) &&
+            (n.squadNode.marketNode.name == marketSelection ||
+                marketSelection == allString) &&
+            (n.squadNode.name == squadSelection || squadSelection == allString),
+      )
       .map((e) => e.name));
 }
 
@@ -73,6 +81,8 @@ class FilterNotifier extends StateNotifier<Filter> {
           allGeoNodes: allGeoNodes,
           allSquadNodes: allSquadNodes,
         ));
+
+  set searchTerms(String t) => state = state.copyWith(searchTerms: t);
 
   set geoSelection(String s) => state = state.copyWith(
         geoSelection: s,
@@ -135,10 +145,10 @@ class FilterNotifier extends StateNotifier<Filter> {
 }
 
 final filterProvider = StateNotifierProvider<FilterNotifier, Filter>((ref) {
-  final allGeoNodes = ref.watch(geosProvider);
-  final allMarketNodes = ref.watch(marketsProvider);
-  final allSquadNodes = ref.watch(squadsProvider);
-  final allAccountNodes = ref.watch(accountsProvider);
+  final allGeoNodes = ref.watch(allGeosProvider);
+  final allMarketNodes = ref.watch(allMarketsProvider);
+  final allSquadNodes = ref.watch(allSquadsProvider);
+  final allAccountNodes = ref.watch(allAccountsProvider);
 
   return FilterNotifier(
       allGeoNodes: allGeoNodes,

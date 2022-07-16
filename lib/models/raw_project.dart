@@ -13,38 +13,6 @@ mixin ProjectAdapter on RemoteAdapter<RawProject> {
 @CopyWith()
 @DataRepository([ProjectAdapter])
 class RawProject extends DataModel<RawProject> {
-  @override
-  final int? id;
-  final String? projectId;
-  final String? projectName;
-  final String? opportunityId;
-  final String? accountId;
-  final String? accountName;
-  final String? notes;
-  final String? projectStage;
-  final DateTime? startDate;
-  final DateTime? endDate;
-  final String? projectLeaderId;
-  final String? projectLeaderName;
-  final String? opportunityOwnerId;
-  final String? opportunityOwnerName;
-  final String? marketCode;
-  final String? parentAccountCode;
-  final String? geo;
-  final String? geoMarketSquad;
-  final bool? isExternalClientReference;
-  final String? market;
-  final String? opportunityName;
-  final double? amount;
-  final DateTime? closeDate;
-  final bool? isOpportunityClosed;
-  final bool? isOpportunityWon;
-  final String? opportunityStage;
-  final String? opportunityFiscalPeriod;
-  final String? opportunityFiscalYear;
-
-  final DateTime? createdAt;
-
   RawProject({
     this.id,
     this.projectId,
@@ -76,6 +44,38 @@ class RawProject extends DataModel<RawProject> {
     this.opportunityFiscalYear,
     this.createdAt,
   });
+
+  final String? accountId;
+  final String? accountName;
+  final double? amount;
+  final DateTime? closeDate;
+  final DateTime? createdAt;
+  final DateTime? endDate;
+  final String? geo;
+  final String? geoMarketSquad;
+  final bool? isExternalClientReference;
+  final bool? isOpportunityClosed;
+  final bool? isOpportunityWon;
+  final String? market;
+  final String? marketCode;
+  final String? notes;
+  final String? opportunityFiscalPeriod;
+  final String? opportunityFiscalYear;
+  final String? opportunityId;
+  final String? opportunityName;
+  final String? opportunityOwnerId;
+  final String? opportunityOwnerName;
+  final String? opportunityStage;
+  final String? parentAccountCode;
+  final String? projectId;
+  final String? projectLeaderId;
+  final String? projectLeaderName;
+  final String? projectName;
+  final String? projectStage;
+  final DateTime? startDate;
+
+  @override
+  final int? id;
 
   static RawProject fromJson(Map<String, dynamic> json) =>
       _$RawProjectFromJson(json);
