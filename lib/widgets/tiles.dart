@@ -6,10 +6,11 @@ import '../nodes/market_node.dart';
 import '../nodes/project_node.dart';
 import '../nodes/squad_node.dart';
 
-class ProjectTile extends StatelessWidget {
+class ProjectTile extends Tile {
   const ProjectTile({
     Key? key,
     required this.node,
+    super.color,
   }) : super(key: key);
 
   final ProjectNode node;
@@ -17,8 +18,8 @@ class ProjectTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Colors.green,
       clipBehavior: Clip.antiAlias,
+      color: color,
       child: ListTile(
         title: Text(node.rawProject.projectName!),
         subtitle: const Text('Project'),
@@ -27,10 +28,11 @@ class ProjectTile extends StatelessWidget {
   }
 }
 
-class AccountTile extends StatelessWidget {
+class AccountTile extends Tile {
   const AccountTile({
     Key? key,
     required this.node,
+    super.color,
   }) : super(key: key);
 
   final AccountNode node;
@@ -38,8 +40,8 @@ class AccountTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Colors.lightGreen,
       clipBehavior: Clip.antiAlias,
+      color: color,
       child: ListTile(
         title: Text(node.name),
         subtitle: const Text('Account'),
@@ -48,10 +50,11 @@ class AccountTile extends StatelessWidget {
   }
 }
 
-class SquadTile extends StatelessWidget {
+class SquadTile extends Tile {
   const SquadTile({
     Key? key,
     required this.node,
+    super.color,
   }) : super(key: key);
 
   final SquadNode node;
@@ -59,8 +62,8 @@ class SquadTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: const Color.fromARGB(255, 155, 63, 198),
       clipBehavior: Clip.antiAlias,
+      color: color,
       child: ListTile(
         title: Text(node.name),
         subtitle: const Text('Squad'),
@@ -69,10 +72,11 @@ class SquadTile extends StatelessWidget {
   }
 }
 
-class MarketTile extends StatelessWidget {
+class MarketTile extends Tile {
   const MarketTile({
     Key? key,
     required this.node,
+    super.color,
   }) : super(key: key);
 
   final MarketNode node;
@@ -80,8 +84,8 @@ class MarketTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Colors.deepPurple,
       clipBehavior: Clip.antiAlias,
+      color: color,
       child: ListTile(
         title: Text(node.name),
         subtitle: const Text('Market'),
@@ -90,10 +94,11 @@ class MarketTile extends StatelessWidget {
   }
 }
 
-class GeoTile extends StatelessWidget {
+class GeoTile extends Tile {
   const GeoTile({
     Key? key,
     required this.node,
+    super.color,
   }) : super(key: key);
 
   final GeoNode node;
@@ -101,12 +106,26 @@ class GeoTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Colors.blueAccent,
       clipBehavior: Clip.antiAlias,
+      color: color,
       child: ListTile(
         title: Text(node.name),
         subtitle: const Text('Geo'),
       ),
     );
+  }
+}
+
+class Tile extends StatelessWidget {
+  final Color color;
+
+  const Tile({
+    Key? key,
+    this.color = Colors.blueAccent,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    throw UnimplementedError();
   }
 }

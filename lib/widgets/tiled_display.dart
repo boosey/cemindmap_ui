@@ -10,6 +10,12 @@ import '../nodes/market_node.dart';
 import '../nodes/project_node.dart';
 import '../nodes/squad_node.dart';
 
+const geoTileColor = Colors.blueAccent;
+const marketTileColor = Color.fromARGB(255, 167, 146, 203);
+const squadTileColor = Color.fromARGB(255, 155, 63, 198);
+const accountTileColor = Colors.lightGreen;
+const projectTileColor = Colors.green;
+
 class TiledDisplay extends HookConsumerWidget {
   TiledDisplay({
     Key? key,
@@ -23,37 +29,66 @@ class TiledDisplay extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return CustomScrollView(
-      slivers: <Widget>[
-        Section(
-          sectionTitle: "Geographies",
-          nodeDisplayCountProvider: geosDisplayCountProvider,
-          filteredNodesProvider: filteredGeoNodesProvider,
-          delegate: (g) => GeoTile(node: g as GeoNode),
-        ),
-        Section(
-          sectionTitle: "Markets",
-          nodeDisplayCountProvider: marketsDisplayCountProvider,
-          filteredNodesProvider: filteredMarketNodesProvider,
-          delegate: (g) => MarketTile(node: g as MarketNode),
-        ),
-        Section(
-          sectionTitle: "Squads",
-          nodeDisplayCountProvider: squadsDisplayCountProvider,
-          filteredNodesProvider: filteredSquadNodesProvider,
-          delegate: (g) => SquadTile(node: g as SquadNode),
-        ),
-        Section(
-          sectionTitle: "Accounts",
-          nodeDisplayCountProvider: accountsDisplayCountProvider,
-          filteredNodesProvider: filteredAccountNodesProvider,
-          delegate: (g) => AccountTile(node: g as AccountNode),
-        ),
-        Section(
-          sectionTitle: "Projects",
-          nodeDisplayCountProvider: projectsDisplayCountProvider,
-          filteredNodesProvider: filteredProjectNodesProvider,
-          delegate: (g) => ProjectTile(node: g as ProjectNode),
+    return Stack(
+      children: [
+        CustomScrollView(
+          slivers: <Widget>[
+            Section(
+              sectionTitle: "Geographies",
+              nodeDisplayCountProvider: geosDisplayCountProvider,
+              filteredNodesProvider: filteredGeoNodesProvider,
+              moreButtonColor: geoTileColor,
+              delegate: (g) => GeoTile(
+                key: Key(g.name),
+                node: g as GeoNode,
+                color: geoTileColor,
+              ),
+            ),
+            Section(
+              sectionTitle: "Markets",
+              nodeDisplayCountProvider: marketsDisplayCountProvider,
+              filteredNodesProvider: filteredMarketNodesProvider,
+              moreButtonColor: marketTileColor,
+              delegate: (g) => MarketTile(
+                key: Key(g.name),
+                node: g as MarketNode,
+                color: marketTileColor,
+              ),
+            ),
+            Section(
+              sectionTitle: "Squads",
+              nodeDisplayCountProvider: squadsDisplayCountProvider,
+              filteredNodesProvider: filteredSquadNodesProvider,
+              moreButtonColor: squadTileColor,
+              delegate: (g) => SquadTile(
+                key: Key(g.name),
+                node: g as SquadNode,
+                color: squadTileColor,
+              ),
+            ),
+            Section(
+              sectionTitle: "Accounts",
+              nodeDisplayCountProvider: accountsDisplayCountProvider,
+              filteredNodesProvider: filteredAccountNodesProvider,
+              moreButtonColor: accountTileColor,
+              delegate: (g) => AccountTile(
+                key: Key(g.name),
+                node: g as AccountNode,
+                color: accountTileColor,
+              ),
+            ),
+            Section(
+              sectionTitle: "Projects",
+              nodeDisplayCountProvider: projectsDisplayCountProvider,
+              filteredNodesProvider: filteredProjectNodesProvider,
+              moreButtonColor: projectTileColor,
+              delegate: (g) => ProjectTile(
+                key: Key(g.name),
+                node: g as ProjectNode,
+                color: projectTileColor,
+              ),
+            ),
+          ],
         ),
       ],
     );

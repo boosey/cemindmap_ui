@@ -12,6 +12,7 @@ class Section extends HookConsumerWidget {
     required this.filteredNodesProvider,
     required this.delegate,
     required this.nodeDisplayCountProvider,
+    this.moreButtonColor = Colors.blueAccent,
     this.widgetExtentMultiple = 16,
   }) : super(key: key);
 
@@ -20,6 +21,7 @@ class Section extends HookConsumerWidget {
   final StateProvider<int> nodeDisplayCountProvider;
   final String sectionTitle;
   final double widgetExtentMultiple;
+  final Color moreButtonColor;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -62,7 +64,7 @@ class Section extends HookConsumerWidget {
           visible: filteredNodes.isNotEmpty && nodeCount < filteredNodes.length,
           child: SliverToBoxAdapter(
             child: Card(
-              color: Colors.blueAccent,
+              color: moreButtonColor,
               child: MaterialButton(
                 onPressed: () {
                   ref.read(nodeDisplayCountProvider.notifier).state =

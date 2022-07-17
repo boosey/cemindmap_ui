@@ -45,6 +45,8 @@ final filteredNodesProvider = Provider<FilteredNodes>((ref) {
   final projects = ref.watch(allProjectsProvider);
   final filter = ref.watch(filterProvider);
 
+  // log("${geos.length} / ${markets.length} / ${squads.length} / ${accounts.length} / ${projects.length} / ");
+
   final geoNodes = geos
       .where(
         (node) => passesFilter(
