@@ -42,6 +42,7 @@ class MindMap extends HookConsumerWidget {
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const FilterBar(),
           const SearchBar(),

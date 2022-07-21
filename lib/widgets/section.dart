@@ -33,6 +33,7 @@ class Section extends HookConsumerWidget {
 
     return MultiSliver(
       children: [
+        // Section title
         SliverToBoxAdapter(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(8, 25, 0, 8),
@@ -53,6 +54,8 @@ class Section extends HookConsumerWidget {
             ),
           ),
         ),
+
+        // Node Widgets
         SliverGrid.extent(
           maxCrossAxisExtent:
               Theme.of(context).textTheme.titleLarge!.fontSize! *
@@ -60,6 +63,8 @@ class Section extends HookConsumerWidget {
           childAspectRatio: 3.5,
           children: tiles,
         ),
+
+        // More button
         Visibility(
           visible: filteredNodes.isNotEmpty && nodeCount < filteredNodes.length,
           child: SliverToBoxAdapter(

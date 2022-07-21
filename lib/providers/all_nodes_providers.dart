@@ -9,6 +9,13 @@ import 'package:flutter_data/flutter_data.dart';
 import 'package:cemindmap_ui/main.data.dart';
 
 class NodesFromRawProjectsData {
+  /// Geos, Markets, Squads, and Accounts are derived from the raw project data
+  /// imported from ISC. Since we are creating Sets of data rather than Lists
+  /// We insert each derived node into the appropriate Set. Since it is a set
+  /// and we've overridden the == and hash function on each node type, if the
+  /// node is already in the set, it is never actually added twice. This
+  /// provides us the sets of node types with each node being unique.
+
   NodesFromRawProjectsData({required List<RawProject> rawProjects}) {
     // Create nodes from raw project data
 
@@ -28,33 +35,22 @@ class NodesFromRawProjectsData {
       squads.add(currentSquad);
       accounts.add(currentAccount);
       projects.add(currentProject);
-
-      // if (projects.length >= 100) {
-      //   break;
-      // }
     }
   }
 
   final Set<AccountNode> accounts = {};
-  // final WWNode wwNode = WWNode(key: 'ww_node');
   final Set<GeoNode> geos = {};
-
   final Set<MarketNode> markets = {};
   final Set<ProjectNode> projects = {};
   final Set<SquadNode> squads = {};
 }
 
-class NodesFromRawProjectsDataStateNotifier
-    extends StateNotifier<NodesFromRawProjectsData> {
-  NodesFromRawProjectsDataStateNotifier(super.state);
-}
-
-final nodesFromRawProjectsDataProvider = StateNotifierProvider<
-    NodesFromRawProjectsDataStateNotifier, NodesFromRawProjectsData>((ref) {
+final nodesFromRawProjectsDataProvider =
+    Provider<NodesFromRawProjectsData>((ref) {
   final rawProjects = ref.rawProjects.watchAll();
 
-  return NodesFromRawProjectsDataStateNotifier(NodesFromRawProjectsData(
-      rawProjects: rawProjects.hasModel ? rawProjects.model! : []));
+  return NodesFromRawProjectsData(
+      rawProjects: rawProjects.hasModel ? rawProjects.model! : []);
 });
 
 final allGeosProvider = Provider<Set<GeoNode>>((ref) {

@@ -40,6 +40,7 @@ dependencies:
   copy_with_extension: ^4.0.2
   hooks_riverpod: ^1.0.4
   sliver_tools: ^0.2.7
+  tinycolor: ^1.0.3
 
 dev_dependencies:
   flutter_test:

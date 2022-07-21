@@ -1,3 +1,4 @@
+import 'package:cemindmap_ui/providers/detail_widgets_provider.dart';
 import 'package:cemindmap_ui/providers/filtered_nodes_provider.dart';
 import 'package:cemindmap_ui/widgets/section.dart';
 import 'package:cemindmap_ui/widgets/tiles.dart';
@@ -29,6 +30,7 @@ class TiledDisplay extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final detailWidgets = ref.watch(detailWidgetsProvider);
     return Stack(
       children: [
         CustomScrollView(
@@ -88,8 +90,10 @@ class TiledDisplay extends HookConsumerWidget {
                 color: projectTileColor,
               ),
             ),
+            const SliverPadding(padding: EdgeInsets.only(bottom: 700)),
           ],
         ),
+        ...detailWidgets.values,
       ],
     );
   }

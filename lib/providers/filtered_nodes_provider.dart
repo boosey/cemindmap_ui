@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cemindmap_ui/nodes/account_node.dart';
 import 'package:cemindmap_ui/nodes/geo_node.dart';
 import 'package:cemindmap_ui/nodes/market_node.dart';
@@ -44,8 +42,6 @@ final filteredNodesProvider = Provider<FilteredNodes>((ref) {
   final accounts = ref.watch(allAccountsProvider);
   final projects = ref.watch(allProjectsProvider);
   final filter = ref.watch(filterProvider);
-
-  // log("${geos.length} / ${markets.length} / ${squads.length} / ${accounts.length} / ${projects.length} / ");
 
   final geoNodes = geos
       .where(
@@ -136,13 +132,6 @@ final filteredNodesProvider = Provider<FilteredNodes>((ref) {
       geoNodes.add(p.account.squadNode.marketNode.geoNode);
     }
   }
-
-  log("FilteredNodes");
-  log("Geos: ${geoNodes.length}");
-  log("Markets: ${marketNodes.length}");
-  log("Squads: ${squadNodes.length}");
-  log("Accounts: ${accountNodes.length}");
-  log("Projects: ${projectNodes.length}");
 
   return FilteredNodes(
       geoNodes: geoNodes,

@@ -13,41 +13,54 @@ class FilterBar extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final filter = ref.watch(filterProvider);
 
-    return Row(
-      children: [
-        FilterWidget(
-          label: "Geography",
-          items: filter.geoOptions,
-          selected: filter.geoSelection,
-          onChanged: (value) => ref
-              .read<FilterNotifier>(filterProvider.notifier)
-              .geoSelection = value,
-        ),
-        FilterWidget(
-          label: "Market",
-          items: filter.marketOptions,
-          selected: filter.marketSelection,
-          onChanged: (value) => ref
-              .read<FilterNotifier>(filterProvider.notifier)
-              .marketSelection = value,
-        ),
-        FilterWidget(
-          label: "Squad",
-          items: filter.squadOptions,
-          selected: filter.squadSelection,
-          onChanged: (value) => ref
-              .read<FilterNotifier>(filterProvider.notifier)
-              .squadSelection = value,
-        ),
-        FilterWidget(
-          label: "Account",
-          items: filter.accountOptions,
-          selected: filter.accountSelection,
-          onChanged: (value) => ref
-              .read<FilterNotifier>(filterProvider.notifier)
-              .accountSelection = value,
-        ),
-      ],
+    return Container(
+      padding: const EdgeInsets.only(left: 10, right: 10),
+      clipBehavior: Clip.antiAlias,
+      decoration: const BoxDecoration(),
+      child: Wrap(
+        direction: Axis.horizontal,
+        spacing: 10,
+        alignment: WrapAlignment.start,
+        runAlignment: WrapAlignment.start,
+        crossAxisAlignment: WrapCrossAlignment.start,
+        children: [
+          FilterWidget(
+            label: "Geography",
+            items: filter.geoOptions,
+            selected: filter.geoSelection,
+            onChanged: (value) => ref
+                .read<FilterNotifier>(filterProvider.notifier)
+                .geoSelection = value,
+          ),
+          FilterWidget(
+            label: "Market",
+            items: filter.marketOptions,
+            selected: filter.marketSelection,
+            onChanged: (value) => ref
+                .read<FilterNotifier>(filterProvider.notifier)
+                .marketSelection = value,
+          ),
+          FilterWidget(
+            label: "Squad",
+            items: filter.squadOptions,
+            selected: filter.squadSelection,
+            onChanged: (value) => ref
+                .read<FilterNotifier>(filterProvider.notifier)
+                .squadSelection = value,
+          ),
+          Flexible(
+            fit: FlexFit.tight,
+            child: FilterWidget(
+              label: "Account",
+              items: filter.accountOptions,
+              selected: filter.accountSelection,
+              onChanged: (value) => ref
+                  .read<FilterNotifier>(filterProvider.notifier)
+                  .accountSelection = value,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
