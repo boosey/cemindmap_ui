@@ -29,23 +29,18 @@ class FilterWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     var dropdownItems = createDropdownItems(items);
 
-    return Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(padding: EdgeInsets.all(10)),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              label,
-              textAlign: TextAlign.left,
-            ),
-            DropdownButton<String>(
-              items: dropdownItems,
-              value: selected,
-              // When the user interacts with the dropdown, we update the provider state.
-              onChanged: (value) => onChanged(value!),
-            ),
-          ],
+        Text(
+          label,
+          textAlign: TextAlign.left,
+        ),
+        DropdownButton<String>(
+          items: dropdownItems,
+          value: selected,
+          // When the user interacts with the dropdown, we update the provider state.
+          onChanged: (value) => onChanged(value!),
         ),
       ],
     );
