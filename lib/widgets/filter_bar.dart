@@ -48,16 +48,13 @@ class FilterBar extends HookConsumerWidget {
                 .read<FilterNotifier>(filterProvider.notifier)
                 .squadSelection = value,
           ),
-          Flexible(
-            fit: FlexFit.tight,
-            child: FilterWidget(
-              label: "Account",
-              items: filter.accountOptions,
-              selected: filter.accountSelection,
-              onChanged: (value) => ref
-                  .read<FilterNotifier>(filterProvider.notifier)
-                  .accountSelection = value,
-            ),
+          FilterWidget(
+            label: "Account",
+            items: filter.accountOptions,
+            selected: filter.accountSelection,
+            onChanged: (value) => ref
+                .read<FilterNotifier>(filterProvider.notifier)
+                .accountSelection = value,
           ),
         ],
       ),

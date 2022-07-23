@@ -174,3 +174,35 @@ class GeoTile extends Tile {
     );
   }
 }
+
+class AssignmentTile extends Tile {
+  const AssignmentTile({
+    Key? key,
+    required super.node,
+    super.color,
+  }) : super(key: key);
+
+  @override
+  Widget buildContent(BuildContext context) {
+    return ListTile(
+      title: Text(node.name),
+      subtitle: const Text('Assigment'),
+    );
+  }
+}
+
+class TalentTile extends Tile {
+  const TalentTile({
+    Key? key,
+    required super.node,
+    super.color,
+  }) : super(key: key);
+
+  @override
+  Widget buildContent(BuildContext context) {
+    return ListTile(
+      title: Text(node.name),
+      subtitle: const Text('Talent'),
+    );
+  }
+}

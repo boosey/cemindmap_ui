@@ -377,6 +377,7 @@ class _$RawProjectCWProxyImpl implements _$RawProjectCWProxy {
 
 extension $RawProjectCopyWith on RawProject {
   /// Returns a callable class that can be used as follows: `instanceOfRawProject.copyWith(...)` or like so:`instanceOfRawProject.copyWith.fieldName(...)`.
+  // ignore: library_private_types_in_public_api
   _$RawProjectCWProxy get copyWith => _$RawProjectCWProxyImpl(this);
 }
 

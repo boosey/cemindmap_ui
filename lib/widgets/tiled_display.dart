@@ -1,3 +1,4 @@
+import 'package:cemindmap_ui/nodes/assignment_node.dart';
 import 'package:cemindmap_ui/providers/detail_widgets_provider.dart';
 import 'package:cemindmap_ui/providers/filtered_nodes_provider.dart';
 import 'package:cemindmap_ui/widgets/section.dart';
@@ -10,12 +11,15 @@ import '../nodes/geo_node.dart';
 import '../nodes/market_node.dart';
 import '../nodes/project_node.dart';
 import '../nodes/squad_node.dart';
+import '../nodes/talent_node.dart';
 
 const geoTileColor = Colors.blueAccent;
 const marketTileColor = Color.fromARGB(255, 167, 146, 203);
 const squadTileColor = Color.fromARGB(255, 155, 63, 198);
 const accountTileColor = Colors.lightGreen;
 const projectTileColor = Colors.green;
+const assignmentTileColor = Color.fromARGB(255, 232, 145, 225);
+const talentTileColor = Color.fromARGB(255, 237, 206, 30);
 
 class TiledDisplay extends HookConsumerWidget {
   TiledDisplay({
@@ -27,6 +31,8 @@ class TiledDisplay extends HookConsumerWidget {
   final marketsDisplayCountProvider = StateProvider<int>((ref) => 25);
   final projectsDisplayCountProvider = StateProvider<int>((ref) => 25);
   final squadsDisplayCountProvider = StateProvider<int>((ref) => 25);
+  final assignmentsDisplayCountProvider = StateProvider<int>((ref) => 25);
+  final talentDisplayCountProvider = StateProvider<int>((ref) => 25);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -88,6 +94,28 @@ class TiledDisplay extends HookConsumerWidget {
                 key: Key(g.name),
                 node: g as ProjectNode,
                 color: projectTileColor,
+              ),
+            ),
+            Section(
+              sectionTitle: "Assignments",
+              nodeDisplayCountProvider: assignmentsDisplayCountProvider,
+              filteredNodesProvider: filteredAssignmentNodesProvider,
+              moreButtonColor: assignmentTileColor,
+              delegate: (g) => AssignmentTile(
+                key: Key(g.name),
+                node: g as AssignmentNode,
+                color: assignmentTileColor,
+              ),
+            ),
+            Section(
+              sectionTitle: "Talent",
+              nodeDisplayCountProvider: talentDisplayCountProvider,
+              filteredNodesProvider: filteredtalentNodesProvider,
+              moreButtonColor: talentTileColor,
+              delegate: (g) => TalentTile(
+                key: Key(g.name),
+                node: g as TalentNode,
+                color: talentTileColor,
               ),
             ),
             const SliverPadding(padding: EdgeInsets.only(bottom: 700)),

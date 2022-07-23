@@ -1,9 +1,11 @@
 import 'package:cemindmap_ui/nodes/account_node.dart';
+import 'package:cemindmap_ui/nodes/assignment_node.dart';
 import 'package:cemindmap_ui/nodes/geo_node.dart';
 import 'package:cemindmap_ui/nodes/market_node.dart';
 import 'package:cemindmap_ui/nodes/node_data.dart';
 import 'package:cemindmap_ui/nodes/project_node.dart';
 import 'package:cemindmap_ui/nodes/squad_node.dart';
+import 'package:cemindmap_ui/nodes/talent_node.dart';
 import 'package:cemindmap_ui/providers/all_nodes_providers.dart';
 import 'package:cemindmap_ui/providers/filter_provider.dart';
 import 'package:flutter_data/flutter_data.dart';
@@ -14,6 +16,8 @@ class FilteredNodes {
       required this.marketNodes,
       required this.squadNodes,
       required this.accountNodes,
+      required this.assignmentNodes,
+      required this.talentNodes,
       required this.projectNodes});
 
   final Set<AccountNode> accountNodes;
@@ -21,6 +25,8 @@ class FilteredNodes {
   final Set<MarketNode> marketNodes;
   final Set<ProjectNode> projectNodes;
   final Set<SquadNode> squadNodes;
+  final Set<AssignmentNode> assignmentNodes;
+  final Set<TalentNode> talentNodes;
 }
 
 bool passesFilter<T extends NodeData>(
@@ -41,6 +47,8 @@ final filteredNodesProvider = Provider<FilteredNodes>((ref) {
   final squads = ref.watch(allSquadsProvider);
   final accounts = ref.watch(allAccountsProvider);
   final projects = ref.watch(allProjectsProvider);
+  final assignments = ref.watch(allAssignmentsProvider);
+  final talent = ref.watch(allTalentProvider);
   final filter = ref.watch(filterProvider);
 
   final geoNodes = geos
@@ -110,6 +118,34 @@ final filteredNodesProvider = Provider<FilteredNodes>((ref) {
       )
       .toSet();
 
+  final assignmentNodes = assignments
+      .where(
+        (node) => passesFilter(
+          node,
+          filter.searchTerms,
+          (AssignmentNode n) =>
+              isAllOrMatches(
+                  filter.accountSelection, n.projectNode.account.name) &&
+              isAllOrMatches(filter.squadSelection,
+                  n.projectNode.account.squadNode.name) &&
+              isAllOrMatches(filter.marketSelection,
+                  n.projectNode.account.squadNode.marketNode.name) &&
+              isAllOrMatches(filter.geoSelection,
+                  n.projectNode.account.squadNode.marketNode.geoNode.name),
+        ),
+      )
+      .toSet();
+
+  final talentNodes = talent
+      .where(
+        (node) => passesFilter(
+          node,
+          filter.searchTerms,
+          (TalentNode n) => true,
+        ),
+      )
+      .toSet();
+
   if (filter.searchTerms.isNotEmpty && filter.searchTerms.length >= 3) {
     for (var m in marketNodes) {
       geoNodes.add(m.geoNode);
@@ -138,6 +174,8 @@ final filteredNodesProvider = Provider<FilteredNodes>((ref) {
       marketNodes: marketNodes,
       squadNodes: squadNodes,
       accountNodes: accountNodes,
+      assignmentNodes: assignmentNodes,
+      talentNodes: talentNodes,
       projectNodes: projectNodes);
 });
 
@@ -169,4 +207,16 @@ final filteredProjectNodesProvider = Provider<Set<ProjectNode>>((ref) {
   final filteredNodes = ref.watch(filteredNodesProvider);
 
   return filteredNodes.projectNodes;
+});
+
+final filteredAssignmentNodesProvider = Provider<Set<AssignmentNode>>((ref) {
+  final filteredNodes = ref.watch(filteredNodesProvider);
+
+  return filteredNodes.assignmentNodes;
+});
+
+final filteredtalentNodesProvider = Provider<Set<TalentNode>>((ref) {
+  final filteredNodes = ref.watch(filteredNodesProvider);
+
+  return filteredNodes.talentNodes;
 });
