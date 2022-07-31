@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cemindmap_ui/models/raw_assignment.dart';
 import 'package:cemindmap_ui/models/raw_project.dart';
 import 'package:cemindmap_ui/nodes/account_node.dart';
@@ -57,8 +55,8 @@ class NodesFromRawData {
             talentNode: currentTalent);
 
         assignments.add(currentAssignment);
-      } on StateError catch (e) {
-        log("No project for assignment: ${rawAssignment.assignmentId} / ${rawAssignment.assignmentName} Error: $e");
+      } on StateError catch (_) {
+        // log("No project for assignment: ${rawAssignment.assignmentId} / ${rawAssignment.assignmentName} Error: $e");
       }
     }
   }

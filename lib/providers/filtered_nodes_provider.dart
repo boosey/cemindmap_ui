@@ -136,15 +136,15 @@ final filteredNodesProvider = Provider<FilteredNodes>((ref) {
       )
       .toSet();
 
-  final talentNodes = talent
-      .where(
-        (node) => passesFilter(
-          node,
-          filter.searchTerms,
-          (TalentNode n) => true,
-        ),
-      )
-      .toSet();
+  final talentIds = talent.map((e) => e.key).toSet();
+  final talentNodes = talent.where((t) {
+    try {
+      assignmentNodes.firstWhere((a) => talentIds.contains(a.talentNode.key));
+      return true;
+    } on StateError catch (_) {
+      return false;
+    }
+  }).toSet();
 
   if (filter.searchTerms.isNotEmpty && filter.searchTerms.length >= 3) {
     for (var m in marketNodes) {
@@ -161,6 +161,7 @@ final filteredNodesProvider = Provider<FilteredNodes>((ref) {
       marketNodes.add(a.squadNode.marketNode);
       geoNodes.add(a.squadNode.marketNode.geoNode);
     }
+
     for (var p in projectNodes) {
       accountNodes.add(p.account);
       squadNodes.add(p.account.squadNode);

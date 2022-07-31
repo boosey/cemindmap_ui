@@ -1,4 +1,3 @@
-import 'package:cemindmap_ui/nodes/assignment_node.dart';
 import 'package:cemindmap_ui/providers/detail_widgets_provider.dart';
 import 'package:cemindmap_ui/providers/filtered_nodes_provider.dart';
 import 'package:cemindmap_ui/widgets/section.dart';
@@ -96,17 +95,17 @@ class TiledDisplay extends HookConsumerWidget {
                 color: projectTileColor,
               ),
             ),
-            Section(
-              sectionTitle: "Assignments",
-              nodeDisplayCountProvider: assignmentsDisplayCountProvider,
-              filteredNodesProvider: filteredAssignmentNodesProvider,
-              moreButtonColor: assignmentTileColor,
-              delegate: (g) => AssignmentTile(
-                key: Key(g.name),
-                node: g as AssignmentNode,
-                color: assignmentTileColor,
-              ),
-            ),
+            // Section(
+            //   sectionTitle: "Assignments",
+            //   nodeDisplayCountProvider: assignmentsDisplayCountProvider,
+            //   filteredNodesProvider: filteredAssignmentNodesProvider,
+            //   moreButtonColor: assignmentTileColor,
+            //   delegate: (g) => AssignmentTile(
+            //     key: Key(g.name),
+            //     node: g as AssignmentNode,
+            //     color: assignmentTileColor,
+            //   ),
+            // ),
             Section(
               sectionTitle: "Talent",
               nodeDisplayCountProvider: talentDisplayCountProvider,
