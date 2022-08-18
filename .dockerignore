@@ -1,0 +1,15 @@
+.git
+.cache
+.dart_tool
+.idea
+.vscode
+build
+test
+.packages
+.gitignore
+.flutter-plugins
+.flutter-plugins-dependnencies
+.metadata
+analysis_options.yaml
+pubspec.lock
+.md 

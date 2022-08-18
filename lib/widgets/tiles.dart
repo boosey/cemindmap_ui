@@ -7,12 +7,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 abstract class Tile extends ConsumerStatefulWidget {
   final Color color;
+  final Color textColor;
   final NodeData node;
 
   const Tile({
     Key? key,
     required this.node,
-    this.color = Colors.blueAccent,
+    required this.color,
+    required this.textColor,
   }) : super(key: key);
 
   Widget buildContent(BuildContext context);
@@ -38,9 +40,12 @@ class TileState extends ConsumerState<Tile> {
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
-      onHover: (event) =>
-          position = Offset(event.position.dx, event.position.dy - 150),
+      onHover: (event) {
+        // RenderBox renderBox = context.findAncestorRenderObjectOfType() .findRenderObject() as RenderBox;
+        position = Offset(event.position.dx - 10, event.position.dy - 150);
+      },
       child: GestureDetector(
+        // onTapDown: (details) => position = details.globalPosition,
         onDoubleTap: () {
           final hsl = HSLColor.fromColor(widget.color);
           final h = (hsl.hue * 180) % 360;
@@ -49,30 +54,12 @@ class TileState extends ConsumerState<Tile> {
 
           ref.read(detailWidgetsProvider.notifier).insertDetailWidget(
                 name: widget.node.name,
-                widget: Positioned(
-                  top: position.dy,
-                  left: position.dx,
-                  child: Card(
-                    color: complementaryColor,
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        IconButton(
-                          onPressed: () => ref
-                              .read(detailWidgetsProvider.notifier)
-                              .removeDetailWidget(name: widget.node.name),
-                          icon: const Icon(Icons.cancel),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(20),
-                          child: widget.buildDetailWidget(context),
-                        ),
-                      ],
-                    ),
-                  ),
+                widget: DetailDialog(
+                  position: position,
+                  complementaryColor: complementaryColor,
+                  ref: ref,
+                  nodeName: widget.node.name,
+                  detailWidget: widget.buildDetailWidget,
                 ),
               );
         },
@@ -89,11 +76,100 @@ class TileState extends ConsumerState<Tile> {
   }
 }
 
+class DetailDialog extends StatelessWidget {
+  const DetailDialog({
+    Key? key,
+    required this.position,
+    required this.complementaryColor,
+    required this.ref,
+    required this.nodeName,
+    required this.detailWidget,
+  }) : super(key: key);
+
+  final Offset position;
+  final Color complementaryColor;
+  final WidgetRef ref;
+  final String nodeName;
+  final Widget Function(BuildContext) detailWidget;
+
+  @override
+  Widget build(BuildContext context) {
+    final detailContent = DetailView(
+      ref: ref,
+      nodeName: nodeName,
+      detailWidget: detailWidget,
+    );
+
+    var detailDialog = Card(
+      color: complementaryColor,
+      shape: const RoundedRectangleBorder(
+        side: BorderSide(color: Colors.black, width: 2.0),
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+      ),
+      child: detailContent,
+    );
+    return Positioned(
+      top: position.dy,
+      left: position.dx,
+      child: Draggable(
+        feedback: detailDialog,
+        childWhenDragging: Container(),
+        onDragEnd: (details) {
+          RenderBox renderBox = context.findRenderObject() as RenderBox;
+          ref.read(detailWidgetsProvider.notifier).updateDetailWidgetPosition(
+                name: nodeName,
+                widget: DetailDialog(
+                  position: position + renderBox.globalToLocal(details.offset),
+                  complementaryColor: complementaryColor,
+                  ref: ref,
+                  nodeName: nodeName,
+                  detailWidget: detailWidget,
+                ),
+              );
+        },
+        child: detailDialog,
+      ),
+    );
+  }
+}
+
+class DetailView extends StatelessWidget {
+  const DetailView({
+    Key? key,
+    required this.ref,
+    required this.nodeName,
+    required this.detailWidget,
+  }) : super(key: key);
+
+  final WidgetRef ref;
+  final String nodeName;
+  final Widget Function(BuildContext) detailWidget;
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        IconButton(
+          onPressed: () => ref
+              .read(detailWidgetsProvider.notifier)
+              .removeDetailWidget(name: nodeName),
+          icon: const Icon(Icons.cancel),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(20),
+          child: detailWidget(context),
+        ),
+      ],
+    );
+  }
+}
+
 class ProjectTile extends Tile {
   const ProjectTile({
     Key? key,
     required super.node,
-    super.color,
+    required super.color,
+    required super.textColor,
   }) : super(key: key);
 
   @override
@@ -115,7 +191,8 @@ class AccountTile extends Tile {
   const AccountTile({
     Key? key,
     required super.node,
-    super.color,
+    required super.color,
+    required super.textColor,
   }) : super(key: key);
 
   @override
@@ -131,7 +208,8 @@ class SquadTile extends Tile {
   const SquadTile({
     Key? key,
     required super.node,
-    super.color,
+    required super.color,
+    required super.textColor,
   }) : super(key: key);
 
   @override
@@ -147,7 +225,8 @@ class MarketTile extends Tile {
   const MarketTile({
     Key? key,
     required super.node,
-    super.color,
+    required super.color,
+    required super.textColor,
   }) : super(key: key);
 
   @override
@@ -163,7 +242,8 @@ class GeoTile extends Tile {
   const GeoTile({
     Key? key,
     required super.node,
-    super.color,
+    required super.color,
+    required super.textColor,
   }) : super(key: key);
 
   @override
@@ -179,7 +259,8 @@ class AssignmentTile extends Tile {
   const AssignmentTile({
     Key? key,
     required super.node,
-    super.color,
+    required super.color,
+    required super.textColor,
   }) : super(key: key);
 
   @override
@@ -195,7 +276,8 @@ class TalentTile extends Tile {
   const TalentTile({
     Key? key,
     required super.node,
-    super.color,
+    required super.color,
+    required super.textColor,
   }) : super(key: key);
 
   @override

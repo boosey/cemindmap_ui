@@ -1,6 +1,7 @@
 import 'package:cemindmap_ui/main.data.dart';
 import 'package:cemindmap_ui/widgets/filter_bar.dart';
 import 'package:cemindmap_ui/widgets/search_widget.dart';
+import 'package:cemindmap_ui/widgets/section_toggles.dart';
 import 'package:cemindmap_ui/widgets/tiled_display.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -45,7 +46,12 @@ class MindMap extends HookConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const FilterBar(),
-          const SearchBar(),
+          Row(
+            children: const [
+              SectionTogglesWidget(),
+              Expanded(child: SearchBar()),
+            ],
+          ),
           Expanded(
             child: TiledDisplay(),
           )

@@ -417,7 +417,7 @@ class $RawProjectRemoteAdapter = RemoteAdapter<RawProject> with ProjectAdapter;
 
 final internalRawProjectsRemoteAdapterProvider =
     Provider<RemoteAdapter<RawProject>>((ref) => $RawProjectRemoteAdapter(
-        $RawProjectHiveLocalAdapter(ref.read),
+        $RawProjectHiveLocalAdapter(ref.read, typeId: null),
         InternalHolder(_rawProjectsFinders)));
 
 final rawProjectsRepositoryProvider =

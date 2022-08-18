@@ -11,6 +11,14 @@ class DetailWidgetsNotifier extends StateNotifier<Map<String, Widget>> {
     }
   }
 
+  updateDetailWidgetPosition({required String name, required Widget? widget}) {
+    if (widget != null && name.isNotEmpty && state.containsKey(name)) {
+      state.remove(name);
+      state.putIfAbsent(name, () => widget);
+      state = Map.of(state);
+    }
+  }
+
   removeDetailWidget({required String name}) {
     if (state.remove(name) != null) {
       state = Map.of(state);

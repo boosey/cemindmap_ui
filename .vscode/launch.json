@@ -5,9 +5,22 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "cemindmap_ui",
+      "name": "cemindmap_ui_local",
       "request": "launch",
       "type": "dart",
+      "args": [
+        "--dart-define=PROJECTS_BASE_URL=http://localhost:8888/",
+        "--dart-define=ASSIGNMENTS_BASE_URL=http://localhost:8888/"
+      ]
+    },
+    {
+      "name": "cemindmap_ui_cirrus",
+      "request": "launch",
+      "type": "dart",
+      "args": [
+        "--dart-define=PROJECTS_BASE_URL=https://cebrowserapi.dal1a.ciocloud.nonprod.intranet.ibm.com/",
+        "--dart-define=ASSIGNMENTS_BASE_URL=https://cebrowserapi.dal1a.ciocloud.nonprod.intranet.ibm.com/"
+      ]
     },
     {
       "name": "cemindmap_ui (profile mode)",

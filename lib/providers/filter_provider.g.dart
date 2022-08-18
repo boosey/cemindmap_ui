@@ -155,5 +155,6 @@ class _$FilterCWProxyImpl implements _$FilterCWProxy {
 
 extension $FilterCopyWith on Filter {
   /// Returns a callable class that can be used as follows: `instanceOfFilter.copyWith(...)` or like so:`instanceOfFilter.copyWith.fieldName(...)`.
+  // ignore: library_private_types_in_public_api
   _$FilterCWProxy get copyWith => _$FilterCWProxyImpl(this);
 }

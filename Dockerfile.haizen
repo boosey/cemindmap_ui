@@ -1,0 +1,23 @@
+FROM haizen/flutter:2.10.2-1-alpine AS build-env
+
+
+
+# Run flutter doctor and enable web
+RUN flutter upgrade -v
+# RUN flutter doctor -v
+# RUN flutter config --enable-web
+
+# # Copy files to container and build
+# USER root
+# RUN mkdir /app/
+# COPY . /app/
+# WORKDIR /app/
+# RUN flutter build web -v \
+#   --dart-define=PROJECTS_BASE_URL=https://cebrowserapi.dal1a.ciocloud.nonprod.intranet.ibm.com/ \
+#   --dart-define=ASSIGNMENTS_BASE_URL=https://cebrowserapi.dal1a.ciocloud.nonprod.intranet.ibm.com/
+
+
+# # Stage 2 - Create the run-time image
+# FROM nginx:1.21.1-alpine
+# USER 1001
+# COPY --from=build-env /app/build/web /usr/share/nginx/html

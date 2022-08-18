@@ -230,7 +230,7 @@ class $RawAssignmentRemoteAdapter = RemoteAdapter<RawAssignment>
 
 final internalRawAssignmentsRemoteAdapterProvider =
     Provider<RemoteAdapter<RawAssignment>>((ref) => $RawAssignmentRemoteAdapter(
-        $RawAssignmentHiveLocalAdapter(ref.read),
+        $RawAssignmentHiveLocalAdapter(ref.read, typeId: null),
         InternalHolder(_rawAssignmentsFinders)));
 
 final rawAssignmentsRepositoryProvider = Provider<Repository<RawAssignment>>(

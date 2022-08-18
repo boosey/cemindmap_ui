@@ -29,14 +29,16 @@ ConfigureRepositoryLocalStorage configureRepositoryLocalStorage = ({FutureFn<Str
 };
 
 final repositoryProviders = <String, Provider<Repository<DataModel>>>{
-  'rawAssignments': rawAssignmentsRepositoryProvider,
-'rawProjects': rawProjectsRepositoryProvider
+  'rawassignments': rawAssignmentsRepositoryProvider,
+'rawprojects': rawProjectsRepositoryProvider
 };
 
 final repositoryInitializerProvider =
   FutureProvider<RepositoryInitializer>((ref) async {
-    final adapters = <String, RemoteAdapter>{'rawAssignments': ref.watch(internalRawAssignmentsRemoteAdapterProvider), 'rawProjects': ref.watch(internalRawProjectsRemoteAdapterProvider)};
-    final remotes = <String, bool>{'rawAssignments': true, 'rawProjects': true};
+    DataHelpers.setInternalType<RawAssignment>('rawassignments');
+    DataHelpers.setInternalType<RawProject>('rawprojects');
+    final adapters = <String, RemoteAdapter>{'rawassignments': ref.watch(internalRawAssignmentsRemoteAdapterProvider), 'rawprojects': ref.watch(internalRawProjectsRemoteAdapterProvider)};
+    final remotes = <String, bool>{'rawassignments': true, 'rawprojects': true};
 
     await ref.watch(graphNotifierProvider).initialize();
 

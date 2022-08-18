@@ -6,12 +6,13 @@ part 'raw_project.g.dart';
 
 mixin ProjectAdapter on RemoteAdapter<RawProject> {
   @override
-  String get baseUrl => 'http://localhost:8888/';
+  // String get baseUrl => 'http://localhost:8888/';
+  String get baseUrl => const String.fromEnvironment("PROJECTS_BASE_URL");
 }
 
 @JsonSerializable()
 @CopyWith()
-@DataRepository([ProjectAdapter])
+@DataRepository([ProjectAdapter], internalType: 'rawprojects')
 class RawProject extends DataModel<RawProject> {
   RawProject({
     this.id,

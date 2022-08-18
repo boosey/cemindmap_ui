@@ -6,12 +6,13 @@ part 'raw_assignment.g.dart';
 
 mixin AssignmentAdapter on RemoteAdapter<RawAssignment> {
   @override
-  String get baseUrl => 'http://localhost:8888/';
+  // String get baseUrl => 'http://localhost:8888/';
+  String get baseUrl => const String.fromEnvironment("ASSIGNMENTS_BASE_URL");
 }
 
 @JsonSerializable()
 @CopyWith()
-@DataRepository([AssignmentAdapter])
+@DataRepository([AssignmentAdapter], internalType: 'rawassignments')
 class RawAssignment extends DataModel<RawAssignment> {
   RawAssignment({
     this.id,
